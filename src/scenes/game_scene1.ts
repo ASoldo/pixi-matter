@@ -10,7 +10,7 @@ import {
   Render,
   Composite,
 } from "matter-js";
-import { app } from "../app";
+import { app } from "../main";
 import { keys } from "../utils/input";
 import { sineFunc } from "../components/behaviours/behaviours";
 
