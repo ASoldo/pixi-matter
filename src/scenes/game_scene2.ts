@@ -28,9 +28,9 @@ export class GameScene2 extends BaseScene {
     }, 3000);
   }
 
-  update(deltaTime: number): void {
+  update(_deltaTime: number): void {
     if (!this.active) return; // Only update if the scene is active
-    console.log("Updating Game Scene 2 and deltaTime is", deltaTime);
+    // console.log("Updating Game Scene 2 and deltaTime is", deltaTime);
     // Add specific update logic for Game Scene 2 here
   }
 

@@ -16,10 +16,8 @@ export class GameScene3 extends BaseScene {
 
   init(): void {
     console.log("Initializing Game Scene 3");
-    // Add any specific initialization code for Game Scene 2 here
-    console.log("Initializing Game Scene 2");
-    // Add any specific initialization code for Game Scene 2 here
-    this.platform = Bodies.rectangle(800, 600, 300, 300, {
+    // Add any specific initialization code for Game Scene 3 here
+    this.platform = Bodies.rectangle(600, 400, 300, 300, {
       isStatic: true, // Make sure it is dynamic
       friction: 1, // High friction so objects don't slide off
       mass: 1,
@@ -45,10 +43,13 @@ export class GameScene3 extends BaseScene {
     }, 3000);
   }
 
-  update(deltaTime: number): void {
+  update(_deltaTime: number): void {
     if (!this.active) return; // Only update if the scene is active
-    console.log("Updating Game Scene 3  and deltaTime is", deltaTime);
-    // Add specific update logic for Game Scene 2 here
+    // console.log("Updating Game Scene 3  and deltaTime is", deltaTime);
+    if (this.bunny && this.platform) {
+      this.bunny.position.x = this.platform.position.x;
+      this.bunny.position.y = this.platform.position.y;
+    }
   }
 
   destroy(): void {
