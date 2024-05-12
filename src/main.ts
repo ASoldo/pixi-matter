@@ -1,4 +1,5 @@
 import "./style.css";
+import { initDevtools } from "@pixi/devtools";
 import { SceneManager } from "./scenes/scene_manager";
 import { GameScene2 } from "./scenes/game_scene2";
 import { GameScene3 } from "./scenes/game_scene3";
@@ -145,7 +146,14 @@ export let scene_manager = new SceneManager(app, null as any, null as any);
 
   // app.ticker.add((delta: PIXI.Ticker) => gameScene.update(delta.deltaTime));
   // app.start();
-  (globalThis as any).__PIXI_APP__ = app;
+  initDevtools({
+    app,
+    // If you are not using a pixi app, you can pass the renderer and stage directly
+    // renderer: myRenderer,
+    // stage: myStage,
+  });
+
+  // (globalThis as any).__PIXI_APP__ = app;
   // (globalThis as any).__PIXI_STAGE__ = stage;
   // (globalThis as any).__PIXI_RENDERER__ = renderer;
 })();
