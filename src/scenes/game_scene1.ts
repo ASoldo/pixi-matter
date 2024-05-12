@@ -52,9 +52,9 @@ export class game_scene1 {
   setupCoins() {
     // Create multiple coins
     const coinPositions = [
-      { x: 650, y: 1050 },
-      { x: 750, y: 1050 },
-      { x: 850, y: 1050 }, // Add as many positions as you need
+      { x: 50, y: 105 },
+      { x: 100, y: 105 },
+      { x: 150, y: 105 }, // Add as many positions as you need
     ];
 
     coinPositions.forEach((pos) => {

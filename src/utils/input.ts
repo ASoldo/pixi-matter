@@ -8,3 +8,23 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
   keys[event.code] = false;
 });
+
+export function simulateKeyEvent(keyCode: any, type: any) {
+  const event = new KeyboardEvent(type, {
+    key: keyCode,
+    code: keyCode,
+    which: keyCode.charCodeAt(0),
+    bubbles: true,
+    cancelable: true,
+  });
+
+  window.dispatchEvent(event);
+}
+
+export function buttonPressed(keyCode: any, isPressed: boolean) {
+  if (isPressed) {
+    simulateKeyEvent(keyCode, "keydown");
+  } else {
+    simulateKeyEvent(keyCode, "keyup");
+  }
+}
