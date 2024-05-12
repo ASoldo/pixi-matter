@@ -8,13 +8,21 @@
   <title>Vite + TS</title>
 </head>
 
-<body>
-  <div class="absolute top-0 left-0 right-0 bottom-0 w-full h-full">
+<body class="bg-gray-800 flex justify-center items-center h-screen m-0">
+  <div class="relative w-full max-w-[600px] h-auto overflow-hidden bg-black" style="aspect-ratio: 4 / 3">
     <div id="matter-debug-container" class="absolute inset-0 z-10"></div>
-    <div id="pixi-container" class="absolute inset-0"></div>
+    <div id="pixi-container" class="absolute inset-0 z-0 aspect-video"></div>
   </div>
-
   <script type="module" src="/src/main.ts"></script>
 </body>
+
+<!-- <body> -->
+<!--   <div class="absolute top-0 left-0 right-0 bottom-0 w-full h-full"> -->
+<!--     <div id="matter-debug-container" class="absolute inset-0 z-10"></div> -->
+<!--     <div id="pixi-container" class="absolute inset-0"></div> -->
+<!--   </div> -->
+<!---->
+<!--   <script type="module" src="/src/main.ts"></script> -->
+<!-- </body> -->
 
 </html>

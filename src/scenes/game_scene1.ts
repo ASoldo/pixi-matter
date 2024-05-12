@@ -120,28 +120,28 @@ export class game_scene1 {
     // World.add(this.engine.world, this.gizmos);
     const groundComposite = Composite.create();
     const groundSections = [
-      Bodies.rectangle(400, 1150, 1000, 10, {
+      Bodies.rectangle(400, 150, 100, 10, {
         label: "ground",
         isStatic: true,
         friction: 0.001,
         frictionAir: 0.01,
         restitution: 0.0,
       }),
-      Bodies.rectangle(1500, 1200, 1000, 10, {
+      Bodies.rectangle(500, 200, 100, 10, {
         label: "ground",
         isStatic: true,
         friction: 0.001,
         frictionAir: 0.01,
         restitution: 0.0,
       }),
-      Bodies.rectangle(2600, 1250, 1000, 10, {
+      Bodies.rectangle(600, 250, 100, 10, {
         label: "ground",
         isStatic: true,
         friction: 0.001,
         frictionAir: 0.01,
         restitution: 0.0,
       }),
-      Bodies.rectangle(400, 1300, 4510, 10, {
+      Bodies.rectangle(400, 300, 1000, 10, {
         label: "ground",
         isStatic: true,
         friction: 0.001,
@@ -155,7 +155,7 @@ export class game_scene1 {
     World.add(this.engine.world, groundComposite);
 
     // Setup trigger
-    this.trigger = Bodies.rectangle(400, 800, 200, 50, {
+    this.trigger = Bodies.rectangle(400, 0, 200, 50, {
       isSensor: true,
       isStatic: false,
     });
@@ -166,8 +166,8 @@ export class game_scene1 {
     this.bunny = new PIXI.Sprite(bunnyTexture);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
-    this.bunny.x = app.screen.width / 4;
-    this.bunny.y = app.screen.height / 2;
+    this.bunny.x = 300;
+    this.bunny.y = 10;
     app.stage.addChild(this.bunny);
 
     // When the texture is loaded, update the bunny body
@@ -263,16 +263,16 @@ export class game_scene1 {
     // Apply the sine function to the trigger's Y position
     const amplitude = 50; // Height of the wave, adjust as needed
     const frequency = 1; // Cycles per second, adjust as needed
-    const newY = sineFunc(1200, elapsedTime, amplitude, frequency);
+    const newY = sineFunc(200, elapsedTime, amplitude, frequency);
     Body.setPosition(this.trigger, { x: this.trigger.position.x, y: newY });
 
     // Calculate new Y position for the platform
     const frequency1 = 0.5; // Slower frequency for an elevator-like movement
     const newY1 =
-      1000 + amplitude * Math.sin(2 * Math.PI * frequency1 * elapsedTime);
+      200 + amplitude * Math.sin(2 * Math.PI * frequency1 * elapsedTime);
 
     // Update platform position
-    Body.setPosition(this.platform, { x: 400, y: newY1 });
+    Body.setPosition(this.platform, { x: 100, y: newY1 });
 
     // Ensure the platform does not accumulate vertical velocity
     Body.setVelocity(this.platform, { x: 0, y: 0 });
@@ -308,7 +308,7 @@ export class game_scene1 {
     if (this.bunnyBody) {
       // Cap the bunny's velocity
       const maxVelocityX = 3; // Maximum horizontal velocity
-      const maxVelocityY = 7; // Maximum vertical velocity
+      const maxVelocityY = 9; // Maximum vertical velocity
       const currentVelocity = this.bunnyBody.velocity;
       // console.log(currentVelocity);
       // console.log(this.bunnyBody);
