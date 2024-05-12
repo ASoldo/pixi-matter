@@ -1,15 +1,19 @@
 import "./style.css";
+import { SceneManager } from "./scenes/scene_manager";
+import { GameScene2 } from "./scenes/game_scene2";
+import { GameScene3 } from "./scenes/game_scene3";
 import { buttonPressed } from "./utils/input";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Runner } from "matter-js";
-import { game_scene1 } from "./scenes/game_scene1";
+// import { game_scene1 } from "./scenes/game_scene1";
 export const app = new PIXI.Application();
+export let scene_manager = new SceneManager(app, null as any, null as any);
 (async () => {
   const runner = Runner.create();
   const engine = Engine.create();
   await app.init({
-    width: 600,
-    height: 800,
+    width: 800,
+    height: 600,
     backgroundColor: 0x1099bb,
     // resolution: window.devicePixelRatio || 1,
     autoDensity: true,
@@ -23,8 +27,8 @@ export const app = new PIXI.Application();
     element: document.getElementById("matter-debug-container") as HTMLElement,
     engine: engine,
     options: {
-      width: 600,
-      height: 800,
+      width: 800,
+      height: 600,
       wireframes: true,
       showCollisions: true,
       showAxes: true,
@@ -121,16 +125,26 @@ export const app = new PIXI.Application();
   document
     .getElementById("pixi-container")
     ?.appendChild(app.canvas as HTMLCanvasElement);
-  const gameScene = new game_scene1(engine, matterRender);
+  // const gameScene = new game_scene1(engine, matterRender);
   Render.run(matterRender);
   Runner.run(runner, engine);
   if (matterRender.canvas) {
     matterRender.canvas.style.background = "transparent";
     matterRender.canvas.style.width = "100%";
   }
+  scene_manager = new SceneManager(app, engine, matterRender);
+  scene_manager.addScene("scene2", new GameScene2(app, engine, matterRender));
+  scene_manager.addScene("scene3", new GameScene3(app, engine, matterRender));
 
-  app.ticker.add((delta: PIXI.Ticker) => gameScene.update(delta.deltaTime));
-  app.start();
+  // Default to start with scene1
+  scene_manager.goToScene("scene2");
+
+  app.ticker.add((delta: PIXI.Ticker) => {
+    scene_manager.update(delta.deltaTime);
+  });
+
+  // app.ticker.add((delta: PIXI.Ticker) => gameScene.update(delta.deltaTime));
+  // app.start();
   (globalThis as any).__PIXI_APP__ = app;
   // (globalThis as any).__PIXI_STAGE__ = stage;
   // (globalThis as any).__PIXI_RENDERER__ = renderer;
