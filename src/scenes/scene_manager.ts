@@ -46,6 +46,7 @@ export class SceneManager {
   update(deltaTime: number): void {
     if (this.currentScene) {
       this.currentScene.update(deltaTime);
+      Engine.update(this.engine, (deltaTime * 1000) / 60);
     }
   }
 }
