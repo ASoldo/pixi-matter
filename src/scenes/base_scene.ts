@@ -7,12 +7,14 @@ export abstract class BaseScene {
   protected engine: Engine;
   protected render: Render;
   protected active: boolean;
+  public name: String;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     this.app = app;
     this.engine = engine;
     this.render = render;
     this.active = false;
+    this.name = "";
   }
 
   abstract init(): void;
@@ -20,12 +22,12 @@ export abstract class BaseScene {
   abstract destroy(): void;
 
   start(): void {
-    console.log("Scene started");
+    console.log("Scene started: ", this.name);
     this.active = true;
   }
 
   stop(): void {
-    console.log("Scene stopped");
+    console.log("Scene stopped: ", this.name);
     this.active = false;
   }
 
@@ -35,5 +37,9 @@ export abstract class BaseScene {
       World.remove(this.engine.world, body); // Remove all bodies from Matter world
     });
     this.destroy(); // Call destroy for any additional cleanup
+  }
+
+  isActive(): boolean {
+    return this.active;
   }
 }

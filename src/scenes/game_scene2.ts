@@ -10,7 +10,7 @@ export class GameScene2 extends BaseScene {
   }
 
   init(): void {
-    console.log("Initializing Game Scene 2");
+    console.log("Initializing Game: ", this.name);
     // Add any specific initialization code for Game Scene 2 here
     this.platform = Bodies.rectangle(0, 600, 300, 300, {
       isStatic: true, // Make sure it is dynamic
@@ -35,7 +35,7 @@ export class GameScene2 extends BaseScene {
   }
 
   destroy(): void {
-    console.log("Destroying Game Scene 2");
+    console.log("Destroying Game: ", this.name);
     // Add any cleanup specific to Game Scene 2 here
   }
 }
