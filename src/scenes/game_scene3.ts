@@ -4,11 +4,13 @@ import { scene_manager } from "../main";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
 // import { SceneManager } from "./scene_manager";
+import * as TWEEN from "@tweenjs/tween.js";
 
 export class GameScene3 extends BaseScene {
   private platform!: Body;
   private bunny!: PIXI.Sprite;
-  // private scene_manager!: SceneManager;
+  private tweenBunny!: PIXI.Sprite;
+  private tween!: TWEEN.Tween<PIXI.Sprite> | null;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
@@ -37,6 +39,22 @@ export class GameScene3 extends BaseScene {
       this.bunny.x = 300;
       this.bunny.y = 100;
       this.app.stage.addChild(this.bunny);
+
+      const tweenBunnyTexture = await PIXI.Assets.load("/assets/bunny.png");
+      this.tweenBunny = new PIXI.Sprite(tweenBunnyTexture);
+      this.tweenBunny.anchor.set(0.5);
+      this.tweenBunny.pivot.set(0.5);
+      this.tweenBunny.x = 100;
+      this.tweenBunny.y = 50;
+      this.app.stage.addChild(this.tweenBunny);
+
+      this.tween = new TWEEN.Tween(this.tweenBunny)
+        .to({ position: { x: 300, y: 300 } }, 1500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .yoyo(true)
+        .repeat(Infinity)
+        .start();
+      console.log("Tween is", this.tween);
     })();
     setTimeout(() => {
       scene_manager.goToScene("scene2");
@@ -50,6 +68,7 @@ export class GameScene3 extends BaseScene {
       this.bunny.position.x = this.platform.position.x;
       this.bunny.position.y = this.platform.position.y;
     }
+    TWEEN.update();
   }
 
   destroy(): void {
