@@ -10,7 +10,7 @@ export class LoadingScreen extends BaseScene {
     super(app, engine, render);
     this.name = "LoadingScreen";
   }
-  init(): void {
+  async init(): Promise<void> {
     this.loadingText = new PIXI.Text({
       text: "Loading...",
       style: {

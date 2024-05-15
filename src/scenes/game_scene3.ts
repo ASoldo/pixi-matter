@@ -12,11 +12,14 @@ export class GameScene3 extends BaseScene {
   private tweenBunny!: PIXI.Sprite;
   private tween!: TWEEN.Tween<PIXI.Sprite> | null;
 
+  private bunnyTexture!: PIXI.Texture;
+  private tweenBunnyTexture!: PIXI.Texture;
+
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
   }
 
-  init(): void {
+  async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
     // Add any specific initialization code for Game Scene 3 here
     this.platform = Bodies.rectangle(600, 400, 300, 300, {
@@ -31,34 +34,43 @@ export class GameScene3 extends BaseScene {
     });
     World.add(this.engine.world, this.platform);
 
-    (async () => {
-      const bunnyTexture = await PIXI.Assets.load("/assets/bunny.png");
-      this.bunny = new PIXI.Sprite(bunnyTexture);
+    // Load assets asynchronously
+    try {
+      [this.bunnyTexture, this.tweenBunnyTexture] = await Promise.all([
+        PIXI.Assets.load("/assets/bunny.png"),
+        PIXI.Assets.load("https://pixijs.com/assets/bunny.png"),
+      ]);
+
+      // Initialize sprites
+      this.bunny = new PIXI.Sprite(this.bunnyTexture);
       this.bunny.anchor.set(0.5);
       this.bunny.pivot.set(0.5);
       this.bunny.x = 300;
       this.bunny.y = 100;
       this.app.stage.addChild(this.bunny);
 
-      const tweenBunnyTexture = await PIXI.Assets.load("/assets/bunny.png");
-      this.tweenBunny = new PIXI.Sprite(tweenBunnyTexture);
+      this.tweenBunny = new PIXI.Sprite(this.tweenBunnyTexture);
       this.tweenBunny.anchor.set(0.5);
       this.tweenBunny.pivot.set(0.5);
-      this.tweenBunny.x = 100;
-      this.tweenBunny.y = 50;
+      this.tweenBunny.position.set(0, 300);
       this.app.stage.addChild(this.tweenBunny);
 
+      // Set up tween animation
       this.tween = new TWEEN.Tween(this.tweenBunny)
-        .to({ position: { x: 300, y: 300 } }, 1500)
+        .to({ x: 300, y: 300 }, 1500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .yoyo(true)
         .repeat(Infinity)
         .start();
+
       console.log("Tween is", this.tween);
-    })();
-    setTimeout(() => {
-      scene_manager.goToScene("scene2");
-    }, 3000);
+
+      setTimeout(() => {
+        scene_manager.goToScene("scene2");
+      }, 3000);
+    } catch (error) {
+      console.error("Error loading assets:", error);
+    }
   }
 
   update(_deltaTime: number): void {

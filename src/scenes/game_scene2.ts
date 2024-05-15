@@ -9,7 +9,7 @@ export class GameScene2 extends BaseScene {
     super(app, engine, render);
   }
 
-  init(): void {
+  async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
     // Add any specific initialization code for Game Scene 2 here
     this.platform = Bodies.rectangle(0, 600, 300, 300, {

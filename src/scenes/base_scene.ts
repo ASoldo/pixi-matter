@@ -17,7 +17,7 @@ export abstract class BaseScene {
     this.name = "";
   }
 
-  abstract init(): void;
+  abstract init(): Promise<void>;
   abstract update(deltaTime: number): void;
   abstract destroy(): void;
 
