@@ -10,6 +10,11 @@ export class LoadingScreen extends BaseScene {
     super(app, engine, render);
     this.name = "LoadingScreen";
   }
+
+  async preload(): Promise<void> {
+    console.log("Preloading Loading Screen");
+  }
+
   async init(): Promise<void> {
     this.loadingText = new PIXI.Text({
       text: "Loading...",
@@ -27,12 +32,12 @@ export class LoadingScreen extends BaseScene {
     this.app.stage.addChild(this.loadingText);
   }
 
-  update(deltaTime: number): void {
+  async update(deltaTime: number): Promise<void> {
     // Optionally add some loading animation logic here
     if (this.loadingText) this.loadingText.rotation += deltaTime * 0.05;
   }
 
-  destroy(): void {
+  async destroy(): Promise<void> {
     if (this.loadingText) this.app.stage.removeChild(this.loadingText);
     this.loadingText?.destroy();
   }

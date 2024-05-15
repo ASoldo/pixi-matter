@@ -3,7 +3,6 @@ import { BaseScene } from "./base_scene";
 import { scene_manager } from "../main";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
-// import { SceneManager } from "./scene_manager";
 import * as TWEEN from "@tweenjs/tween.js";
 
 export class GameScene3 extends BaseScene {
@@ -19,8 +18,20 @@ export class GameScene3 extends BaseScene {
     super(app, engine, render);
   }
 
+  async preload(): Promise<void> {
+    try {
+      [this.bunnyTexture, this.tweenBunnyTexture] = await Promise.all([
+        PIXI.Assets.load("/assets/bunny.png"),
+        PIXI.Assets.load("https://pixijs.com/assets/bunny.png"),
+      ]);
+    } catch (error) {
+      console.error("Error preloading assets:", error);
+    }
+  }
+
   async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
+    this.loaded = false;
     // Add any specific initialization code for Game Scene 3 here
     this.platform = Bodies.rectangle(600, 400, 300, 300, {
       isStatic: true, // Make sure it is dynamic
@@ -68,12 +79,14 @@ export class GameScene3 extends BaseScene {
       setTimeout(() => {
         scene_manager.goToScene("scene2");
       }, 3000);
+      // this.loaded = true;
+      this.setLoaded(true);
     } catch (error) {
       console.error("Error loading assets:", error);
     }
   }
 
-  update(_deltaTime: number): void {
+  async update(_deltaTime: number): Promise<void> {
     if (!this.active) return; // Only update if the scene is active
     // console.log("Updating Game Scene 3  and deltaTime is", deltaTime);
     if (this.bunny && this.platform) {
@@ -83,7 +96,7 @@ export class GameScene3 extends BaseScene {
     TWEEN.update();
   }
 
-  destroy(): void {
+  async destroy(): Promise<void> {
     console.log("Destroying Game: ", this.name);
     // Add any cleanup specific to Game Scene 2 here
   }

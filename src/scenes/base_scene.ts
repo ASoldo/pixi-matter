@@ -7,19 +7,23 @@ export abstract class BaseScene {
   protected engine: Engine;
   protected render: Render;
   protected active: boolean;
-  public name: String;
+  protected loaded: boolean; // Flag to track if the scene is fully loaded
+  public name: string;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     this.app = app;
     this.engine = engine;
     this.render = render;
     this.active = false;
+    this.loaded = false;
     this.name = "";
   }
 
   abstract init(): Promise<void>;
-  abstract update(deltaTime: number): void;
-  abstract destroy(): void;
+  abstract update(deltaTime: number): Promise<void>;
+  abstract destroy(): Promise<void>;
+
+  abstract preload(): Promise<void>;
 
   start(): void {
     console.log("Scene started: ", this.name);
@@ -31,15 +35,24 @@ export abstract class BaseScene {
     this.active = false;
   }
 
-  unload(): void {
+  async unload(): Promise<void> {
     this.app.stage.removeChildren(); // Remove all children from the PIXI stage
     this.engine.world.bodies.forEach((body) => {
       World.remove(this.engine.world, body); // Remove all bodies from Matter world
     });
-    this.destroy(); // Call destroy for any additional cleanup
+    await this.destroy(); // Call destroy for any additional cleanup
+    this.loaded = false; // Reset the loaded flag
   }
 
   isActive(): boolean {
     return this.active;
+  }
+
+  isLoaded(): boolean {
+    return this.loaded;
+  }
+
+  setLoaded(loaded: boolean): void {
+    this.loaded = loaded;
   }
 }
