@@ -77,7 +77,10 @@ export class SceneManager {
       this.loadingScene.update(deltaTime);
     } else if (this.currentScene) {
       this.currentScene.update(deltaTime);
-      Engine.update(this.engine, (deltaTime * 1000) / 60);
+      Engine.update(this.engine, (deltaTime * 1000) / 120);
+      // Update the Matter.js engine with a fixed timestep for 120 FPS
+      // const fixedDeltaTime = 1000 / 120; // 120 FPS
+      // Engine.update(this.engine, fixedDeltaTime);
     }
   }
 }

@@ -20,6 +20,8 @@ export let scene_manager = new SceneManager(app, null as any, null as any);
     autoDensity: true,
     backgroundAlpha: 1,
   });
+  app.ticker.maxFPS = 120;
+  app.ticker.minFPS = 120;
 
   const matterRender = Render.create({
     element: document.getElementById("matter-debug-container") as HTMLElement,
