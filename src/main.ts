@@ -77,7 +77,7 @@ export let scene_manager = new SceneManager(app, null as any, null as any);
   scene_manager.addScene("scene3", new GameScene3(app, engine, matterRender));
 
   // Default to start with scene
-  scene_manager.jumpToScene("scene3");
+  scene_manager.goToScene("scene3");
 
   app.ticker.add((delta: PIXI.Ticker) => {
     scene_manager.update(delta.deltaTime);

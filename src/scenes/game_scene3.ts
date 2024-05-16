@@ -1,4 +1,3 @@
-// game_scene3.ts
 import { BaseScene } from "./base_scene";
 import { scene_manager } from "../main";
 import * as PIXI from "pixi.js";
@@ -46,44 +45,36 @@ export class GameScene3 extends BaseScene {
     World.add(this.engine.world, this.platform);
 
     // Load assets asynchronously
-    try {
-      [this.bunnyTexture, this.tweenBunnyTexture] = await Promise.all([
-        PIXI.Assets.load("/assets/bunny.png"),
-        PIXI.Assets.load("https://pixijs.com/assets/bunny.png"),
-      ]);
 
-      // Initialize sprites
-      this.bunny = new PIXI.Sprite(this.bunnyTexture);
-      this.bunny.anchor.set(0.5);
-      this.bunny.pivot.set(0.5);
-      this.bunny.x = 300;
-      this.bunny.y = 100;
-      this.app.stage.addChild(this.bunny);
+    // Initialize sprites
+    this.bunny = new PIXI.Sprite(this.bunnyTexture);
+    this.bunny.anchor.set(0.5);
+    this.bunny.pivot.set(0.5);
+    this.bunny.x = 300;
+    this.bunny.y = 100;
+    this.app.stage.addChild(this.bunny);
 
-      this.tweenBunny = new PIXI.Sprite(this.tweenBunnyTexture);
-      this.tweenBunny.anchor.set(0.5);
-      this.tweenBunny.pivot.set(0.5);
-      this.tweenBunny.position.set(0, 300);
-      this.app.stage.addChild(this.tweenBunny);
+    this.tweenBunny = new PIXI.Sprite(this.tweenBunnyTexture);
+    this.tweenBunny.anchor.set(0.5);
+    this.tweenBunny.pivot.set(0.5);
+    this.tweenBunny.position.set(0, 300);
+    this.app.stage.addChild(this.tweenBunny);
 
-      // Set up tween animation
-      this.tween = new TWEEN.Tween(this.tweenBunny)
-        .to({ x: 300, y: 300 }, 1500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .yoyo(true)
-        .repeat(Infinity)
-        .start();
+    // Set up tween animation
+    this.tween = new TWEEN.Tween(this.tweenBunny)
+      .to({ x: 300, y: 300 }, 1500)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .yoyo(true)
+      .repeat(Infinity)
+      .start();
 
-      console.log("Tween is", this.tween);
+    console.log("Tween is", this.tween);
 
-      setTimeout(() => {
-        scene_manager.goToScene("scene2");
-      }, 3000);
-      // this.loaded = true;
-      this.setLoaded(true);
-    } catch (error) {
-      console.error("Error loading assets:", error);
-    }
+    setTimeout(() => {
+      scene_manager.goToScene("scene2");
+    }, 3000);
+    // this.loaded = true;
+    this.setLoaded(true);
   }
 
   async update(_deltaTime: number): Promise<void> {

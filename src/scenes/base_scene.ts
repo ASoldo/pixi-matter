@@ -1,4 +1,3 @@
-// base_scene.ts
 import * as PIXI from "pixi.js";
 import { Engine, Render, World } from "matter-js";
 

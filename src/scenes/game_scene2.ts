@@ -1,4 +1,3 @@
-// game_scene2.ts
 import { BaseScene } from "./base_scene";
 import * as PIXI from "pixi.js";
 import Matter, { Engine, Render, World, Bodies } from "matter-js";

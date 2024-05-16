@@ -1,4 +1,3 @@
-// scene_manager.ts
 import { BaseScene } from "./base_scene";
 import { LoadingScreen } from "./loading_screen";
 import * as PIXI from "pixi.js";
@@ -32,37 +31,10 @@ export class SceneManager {
     scene.name = name;
   }
 
-  // async goToScene(name: string): Promise<void> {
-  //   if (this.currentScene) {
-  //     this.currentScene.stop();
-  //     await this.currentScene.unload();
-  //   }
-  //
-  //   this.loadingScene.init();
-  //   this.loadingScene.start();
-  //
-  //   const scene = this.scenes[name];
-  //   if (scene) {
-  //     await new Promise<void>(async (resolve) => {
-  //       // Preload the scene
-  //       await scene.preload();
-  //
-  //       setTimeout(async () => {
-  //         this.loadingScene.stop();
-  //         await this.loadingScene.unload();
-  //         await scene.init();
-  //         scene.start();
-  //         this.currentScene = scene;
-  //         resolve();
-  //       }, 1000); // Simulate loading delay, replace with actual loading logic
-  //     });
-  //   }
-  // }
-
   async goToScene(name: string): Promise<void> {
     if (this.currentScene) {
       this.currentScene.stop();
-      this.currentScene.unload();
+      await this.currentScene.unload();
     }
 
     this.loadingScene.init();
@@ -70,11 +42,14 @@ export class SceneManager {
 
     const scene = this.scenes[name];
     if (scene) {
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
+      await new Promise<void>(async (resolve) => {
+        // Preload the scene
+        await scene.preload();
+
+        setTimeout(async () => {
           this.loadingScene.stop();
-          this.loadingScene.unload();
-          scene.init();
+          await this.loadingScene.unload();
+          await scene.init();
           scene.start();
           this.currentScene = scene;
           resolve();

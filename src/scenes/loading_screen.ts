@@ -1,4 +1,3 @@
-// loading_screen.ts
 import { BaseScene } from "./base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
