@@ -1,124 +1,84 @@
-import { sound } from "@pixi/sound";
+import { BaseScene } from "./base_scene";
 import * as PIXI from "pixi.js";
-// import Alpine from "alpinejs";
-import {
+import Matter, {
   Engine,
+  Render,
   World,
   Bodies,
   Body,
   Events,
-  Render,
   Composite,
 } from "matter-js";
+import { sound } from "@pixi/sound";
 import { app } from "../main";
 import { keys } from "../utils/input";
 import { sineFunc } from "../components/behaviours/behaviours";
+import { scene_manager } from "../main";
 
-export class game_scene1 {
-  private engine!: Engine;
+export class GameScene1 extends BaseScene {
   private bunny!: PIXI.Sprite;
   private bunnyBody!: Matter.Body;
   private trigger!: Matter.Body;
-  private render!: Matter.Render;
-  // private bodies: any = Alpine.reactive({ data: [] });
-  private canJump: boolean = false;
-  private startTime: number;
   private platform!: Matter.Body;
-  // private gizmos!: Matter.Body;
-  private score!: 0;
-  private scoreText: PIXI.Text = new PIXI.Text({
-    text: "Score: 0",
-    style: {
-      fontFamily: "Arial",
-      fontSize: 24,
-      fill: 0xffffff,
-    },
-  });
+  private canJump: boolean = false;
+  private startTime!: number;
+  private score: number = 0;
+  private scoreText!: PIXI.Text;
+  private groundComposite!: Matter.Composite;
+  private coins: Matter.Body[] = [];
+  private collisionStartHandler!: (
+    event: Matter.IEventCollision<Matter.Engine>,
+  ) => void;
+  private collisionEndHandler!: (
+    event: Matter.IEventCollision<Matter.Engine>,
+  ) => void;
 
-  constructor(engine: Engine, render: Render) {
-    this.engine = engine;
-    this.render = render;
-    Render.run(this.render);
-    this.initializeGame();
+  constructor(app: PIXI.Application, engine: Engine, render: Render) {
+    super(app, engine, render);
+  }
+
+  async preload(): Promise<void> {
+    await PIXI.Assets.load("/assets/bunny.png");
+
+    // Check if the sound already exists before adding it
+    if (!sound.exists("hit-sound")) {
+      sound.add(
+        "hit-sound",
+        "https://cdn.freesound.org/previews/573/573363_2393492-hq.mp3",
+      );
+    }
+  }
+
+  async init(): Promise<void> {
+    console.log("Initializing Game: ", this.name);
+    this.loaded = false;
+
+    // Initialize game elements
+    this.setup();
+    this.initializeScore();
     this.setupCoins();
     this.startTime = Date.now();
-  }
 
-  async initializeGame() {
-    await this.setup();
-    this.initializeScore();
-  }
-
-  setupCoins() {
-    // Create multiple coins
-    const coinPositions = [
-      { x: 50, y: 105 },
-      { x: 100, y: 105 },
-      { x: 150, y: 105 }, // Add as many positions as you need
-    ];
-
-    coinPositions.forEach((pos) => {
-      const coin = Bodies.circle(pos.x, pos.y, 25, {
-        isSensor: true, // Triggers events but no physical collisions
-        isStatic: true, // Remains stationary
-        label: "Coin",
-      });
-      World.add(this.engine.world, coin);
-    });
-  }
-
-  initializeScore() {
-    this.score = 0;
-
-    // Create a PIXI text object for the score
-    this.scoreText = new PIXI.Text({
-      text: "Score: 0",
-      style: {
-        fontFamily: "Arial",
-        fontSize: 24,
-        fill: 0xffffff,
-      },
-    });
-    this.scoreText.x = 20;
-    this.scoreText.y = 20;
-    app.stage.addChild(this.scoreText);
-  }
-
-  handleCoinCollection(coin: any) {
-    // Remove the coin from the world to simulate collection
-    World.remove(this.engine.world, coin);
-
-    // Increment score
-    this.score += 1;
-    this.scoreText.text = `Score: ${this.score}`;
-    sound.play("hit-sound");
+    setTimeout(() => {
+      scene_manager.goToScene("scene2");
+    }, 3000);
+    this.setLoaded(true);
   }
 
   async setup() {
-    sound.add("hit-sound", "/assets/hit-sound.mp3");
-    // sound.play("hit-sound");
     this.platform = Bodies.rectangle(400, 1000, 300, 30, {
-      isStatic: false, // Make sure it is dynamic
-      friction: 1, // High friction so objects don't slide off
+      isStatic: false,
+      friction: 1,
       mass: 1,
-      restitution: 0.1, // Low restitution to prevent bouncing
-      density: 0.5, // Set density to a reasonable value to prevent heavy impacts
+      restitution: 0.1,
+      density: 0.5,
       inertia: Infinity,
       inverseInertia: Infinity,
       label: "ground",
     });
     World.add(this.engine.world, this.platform);
-    // this.gizmos = Bodies.rectangle(400, 800, 30, 30, {
-    //   mass: 5,
-    //   isStatic: false, // Make sure it is dynamic
-    //   // friction: 1, // High friction so objects don't slide off
-    //   restitution: 0.01, // Low restitution to prevent bouncing
-    //   density: 0.01, // Set density to a reasonable value to prevent heavy impacts
-    //   inertia: Infinity,
-    //   label: "ground",
-    // });
-    // World.add(this.engine.world, this.gizmos);
-    const groundComposite = Composite.create();
+
+    this.groundComposite = Composite.create();
     const groundSections = [
       Bodies.rectangle(400, 150, 100, 10, {
         label: "ground",
@@ -150,18 +110,16 @@ export class game_scene1 {
       }),
     ];
     groundSections.forEach((ground) => {
-      Composite.add(groundComposite, ground);
+      Composite.add(this.groundComposite, ground);
     });
-    World.add(this.engine.world, groundComposite);
+    World.add(this.engine.world, this.groundComposite);
 
-    // Setup trigger
     this.trigger = Bodies.rectangle(400, 0, 200, 50, {
       isSensor: true,
       isStatic: false,
     });
     World.add(this.engine.world, this.trigger);
 
-    // Setup bunny
     const bunnyTexture = await PIXI.Assets.load("/assets/bunny.png");
     this.bunny = new PIXI.Sprite(bunnyTexture);
     this.bunny.anchor.set(0.5);
@@ -170,28 +128,23 @@ export class game_scene1 {
     this.bunny.y = 10;
     app.stage.addChild(this.bunny);
 
-    // When the texture is loaded, update the bunny body
-    if (!bunnyTexture.valid) {
-      this.bunnyBody = Bodies.rectangle(
-        this.bunny.x,
-        this.bunny.y,
-        this.bunny.width,
-        this.bunny.height,
-        {
-          // inverseInertia: Infinity,
-          inertia: Infinity,
-          mass: 5,
-          friction: 0.5,
-          frictionAir: 0.02,
-          restitution: 0.0,
-          density: 0.01,
-        },
-      );
-      console.log(this.bunnyBody);
-      World.add(this.engine.world, this.bunnyBody);
-    }
+    this.bunnyBody = Bodies.rectangle(
+      this.bunny.x,
+      this.bunny.y,
+      this.bunny.width,
+      this.bunny.height,
+      {
+        inertia: Infinity,
+        mass: 5,
+        friction: 0.5,
+        frictionAir: 0.02,
+        restitution: 0.0,
+        density: 0.01,
+      },
+    );
+    World.add(this.engine.world, this.bunnyBody);
 
-    Events.on(this.engine, "collisionStart", (event) => {
+    this.collisionStartHandler = (event) => {
       event.pairs.forEach((pair) => {
         if (pair.bodyA === this.bunnyBody && pair.bodyB.label === "Coin") {
           this.handleCoinCollection(pair.bodyB);
@@ -200,99 +153,122 @@ export class game_scene1 {
           pair.bodyA.label === "Coin"
         ) {
           this.handleCoinCollection(pair.bodyA);
-        }
-      });
-    });
-
-    // Collision events to change bunny color
-    Events.on(this.engine, "collisionStart", (event) => {
-      event.pairs.forEach((pair) => {
-        if (
+        } else if (
           (pair.bodyA === this.bunnyBody && pair.bodyB === this.trigger) ||
           (pair.bodyA === this.trigger && pair.bodyB === this.bunnyBody)
         ) {
-          // Bunny entered the trigger
-          this.bunny.tint = 0xff0000; // Change color to red for example
+          this.bunny.tint = 0xff0000;
           this.score += 1;
           this.scoreText.text = `Score: ${this.score}`;
+        } else if (
+          pair.bodyA === this.bunnyBody &&
+          pair.bodyB.label === "ground"
+        ) {
+          this.canJump = true;
+        } else if (
+          pair.bodyB === this.bunnyBody &&
+          pair.bodyA.label === "ground"
+        ) {
+          this.canJump = true;
         }
       });
-    });
+    };
 
-    Events.on(this.engine, "collisionEnd", (event) => {
+    this.collisionEndHandler = (event) => {
       event.pairs.forEach((pair) => {
         if (
           (pair.bodyA === this.bunnyBody && pair.bodyB === this.trigger) ||
           (pair.bodyA === this.trigger && pair.bodyB === this.bunnyBody)
         ) {
-          // Bunny exited the trigger
-          this.bunny.tint = 0xffffff; // Change color back to normal
-        }
-      });
-    });
-    Events.on(this.engine, "collisionStart", (event) => {
-      event.pairs.forEach((pair) => {
-        if (pair.bodyA === this.bunnyBody && pair.bodyB.label === "ground") {
-          this.canJump = true; // Bunny is touching the ground
+          this.bunny.tint = 0xffffff;
+        } else if (
+          pair.bodyA === this.bunnyBody &&
+          pair.bodyB.label === "ground"
+        ) {
+          this.canJump = false;
         } else if (
           pair.bodyB === this.bunnyBody &&
           pair.bodyA.label === "ground"
         ) {
-          this.canJump = true; // Bunny is touching the ground
+          this.canJump = false;
         }
       });
-    });
+    };
 
-    Events.on(this.engine, "collisionEnd", (event) => {
-      event.pairs.forEach((pair) => {
-        if (pair.bodyA === this.bunnyBody && pair.bodyB.label === "ground") {
-          this.canJump = false; // Bunny is no longer touching the ground
-        } else if (
-          pair.bodyB === this.bunnyBody &&
-          pair.bodyA.label === "ground"
-        ) {
-          this.canJump = false; // Bunny is no longer touching the ground
-        }
+    Events.on(this.engine, "collisionStart", this.collisionStartHandler);
+    Events.on(this.engine, "collisionEnd", this.collisionEndHandler);
+  }
+
+  setupCoins() {
+    const coinPositions = [
+      { x: 50, y: 105 },
+      { x: 100, y: 105 },
+      { x: 150, y: 105 },
+    ];
+
+    coinPositions.forEach((pos) => {
+      const coin = Bodies.circle(pos.x, pos.y, 25, {
+        isSensor: true,
+        isStatic: true,
+        label: "Coin",
       });
+      this.coins.push(coin);
+      World.add(this.engine.world, coin);
     });
   }
-  update(delta: number) {
-    const currentTime = Date.now();
-    const elapsedTime = (currentTime - this.startTime) / 1000; // convert time to seconds
 
-    // Apply the sine function to the trigger's Y position
-    const amplitude = 50; // Height of the wave, adjust as needed
-    const frequency = 1; // Cycles per second, adjust as needed
+  initializeScore() {
+    this.score = 0;
+
+    this.scoreText = new PIXI.Text({
+      text: `Score: ${this.score}`,
+      style: {
+        fontFamily: "Arial",
+        fontSize: 24,
+        fill: 0xffffff,
+      },
+    });
+    this.scoreText.x = 20;
+    this.scoreText.y = 20;
+    app.stage.addChild(this.scoreText);
+  }
+
+  handleCoinCollection(coin: Matter.Body) {
+    World.remove(this.engine.world, coin);
+
+    this.score += 1;
+    this.scoreText.text = `Score: ${this.score}`;
+    sound.play("hit-sound");
+  }
+
+  async update(_deltaTime: number): Promise<void> {
+    if (!this.active) return;
+
+    const currentTime = Date.now();
+    const elapsedTime = (currentTime - this.startTime) / 1000;
+
+    const amplitude = 50;
+    const frequency = 1;
     const newY = sineFunc(200, elapsedTime, amplitude, frequency);
     Body.setPosition(this.trigger, { x: this.trigger.position.x, y: newY });
 
-    // Calculate new Y position for the platform
-    const frequency1 = 0.5; // Slower frequency for an elevator-like movement
+    const frequency1 = 0.5;
     const newY1 =
       200 + amplitude * Math.sin(2 * Math.PI * frequency1 * elapsedTime);
-
-    // Update platform position
     Body.setPosition(this.platform, { x: 100, y: newY1 });
-
-    // Ensure the platform does not accumulate vertical velocity
     Body.setVelocity(this.platform, { x: 0, y: 0 });
 
-    // Update the Matter.js engine
-    Engine.update(this.engine, (delta * 1000) / 60);
-    // this.bodies.data = this.getBodiesData();
-    const moveSpeed = 2; // You can adjust this value to tweak movement speed
+    const moveSpeed = 2;
     if (keys["ArrowLeft"]) {
       Body.setVelocity(this.bunnyBody, {
         x: -moveSpeed,
         y: this.bunnyBody.velocity.y,
       });
-      // console.log("Pressed left");
     } else if (keys["ArrowRight"]) {
       Body.setVelocity(this.bunnyBody, {
         x: moveSpeed,
         y: this.bunnyBody.velocity.y,
       });
-      // console.log("Pressed right");
     }
 
     if (keys["Space"] && this.canJump) {
@@ -301,27 +277,16 @@ export class game_scene1 {
         y: -10,
       });
       this.canJump = false;
-      // console.log("Pressed space");
     }
 
-    // Sync the bunny's PIXI sprite with its Matter.js body
     if (this.bunnyBody) {
-      // Cap the bunny's velocity
-      const maxVelocityX = 3; // Maximum horizontal velocity
-      const maxVelocityY = 9; // Maximum vertical velocity
+      const maxVelocityX = 3;
+      const maxVelocityY = 9;
       const currentVelocity = this.bunnyBody.velocity;
-      // console.log(currentVelocity);
-      // console.log(this.bunnyBody);
 
-      // Body.setVelocity(this.bunnyBody, {
-      //   x: 10, // Maintain direction
-      //   y: 0,
-      // });
-
-      // Check if the current velocity exceeds maximum, and adjust
       if (Math.abs(currentVelocity.x) > maxVelocityX) {
         Body.setVelocity(this.bunnyBody, {
-          x: maxVelocityX * Math.sign(currentVelocity.x), // Maintain direction
+          x: maxVelocityX * Math.sign(currentVelocity.x),
           y: currentVelocity.y,
         });
       }
@@ -336,23 +301,33 @@ export class game_scene1 {
           y: -maxVelocityY,
         });
       }
+
       this.bunny.x = this.bunnyBody.position.x;
       this.bunny.y = this.bunnyBody.position.y;
-      // this.bunny.rotation += 0.01;
     }
   }
 
-  getBodiesData() {
-    return this.engine.world.bodies.map((body) => {
-      return {
-        id: body.id,
-        position: body.position,
-        velocity: body.velocity,
-      };
-    });
-  }
+  async destroy(): Promise<void> {
+    console.log("Destroying Game: ", this.name);
 
-  sceneData() {
-    // return this.bodies;
+    // Remove PIXI objects
+    app.stage.removeChild(this.bunny);
+    this.bunny.destroy();
+    app.stage.removeChild(this.scoreText);
+    this.scoreText.destroy();
+
+    // Remove Matter.js bodies
+    World.remove(this.engine.world, this.bunnyBody);
+    World.remove(this.engine.world, this.trigger);
+    World.remove(this.engine.world, this.platform);
+    Composite.remove(this.engine.world, this.groundComposite, true);
+    this.coins.forEach((coin) => World.remove(this.engine.world, coin));
+
+    // Remove event listeners
+    Events.off(this.engine, "collisionStart", this.collisionStartHandler);
+    Events.off(this.engine, "collisionEnd", this.collisionEndHandler);
+
+    // Clear the Matter.js world
+    Composite.clear(this.engine.world, false);
   }
 }

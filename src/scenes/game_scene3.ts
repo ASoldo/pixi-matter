@@ -71,7 +71,7 @@ export class GameScene3 extends BaseScene {
     console.log("Tween is", this.tween);
 
     setTimeout(() => {
-      scene_manager.goToScene("scene2");
+      scene_manager.goToScene("scene1");
     }, 3000);
     // this.loaded = true;
     this.setLoaded(true);
