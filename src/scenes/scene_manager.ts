@@ -24,6 +24,9 @@ export class SceneManager {
     console.log("App: ", this.app);
     console.log("Engine: ", this.engine);
     console.log("Render: ", this.render);
+    console.log("Scenes: ", this.scenes);
+    console.log("Current Scene: ", this.currentScene);
+    console.log("Loading Scene: ", this.loadingScene);
   }
 
   addScene(name: string, scene: BaseScene): void {
