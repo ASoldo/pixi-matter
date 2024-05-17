@@ -4,6 +4,7 @@ import { SceneManager } from "./scenes/scene_manager";
 import { GameScene1 } from "./scenes/game_scene1";
 import { GameScene2 } from "./scenes/game_scene2";
 import { GameScene3 } from "./scenes/game_scene3";
+import { GameScene4 } from "./scenes/game_scene4";
 import { buttonPressed } from "./utils/input";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Runner } from "matter-js";
@@ -19,6 +20,7 @@ export let scene_manager = new SceneManager(app, null as any, null as any);
     backgroundColor: 0x1099bb,
     autoDensity: true,
     backgroundAlpha: 1,
+    preference: "webgl",
   });
   app.ticker.maxFPS = 120;
   app.ticker.minFPS = 120;
@@ -101,9 +103,10 @@ export let scene_manager = new SceneManager(app, null as any, null as any);
   scene_manager.addScene("scene1", new GameScene1(app, engine, matterRender));
   scene_manager.addScene("scene2", new GameScene2(app, engine, matterRender));
   scene_manager.addScene("scene3", new GameScene3(app, engine, matterRender));
+  scene_manager.addScene("scene4", new GameScene4(app, engine, matterRender));
 
   // Default to start with scene
-  scene_manager.goToScene("scene1");
+  scene_manager.goToScene("scene4");
 
   app.ticker.add((delta: PIXI.Ticker) => {
     scene_manager.update(delta.deltaTime);

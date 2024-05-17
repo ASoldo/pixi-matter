@@ -1,5 +1,6 @@
 // vite.config.js
 import { defineConfig } from "vite";
+import glsl from "vite-plugin-glsl";
 import path from "path";
 
 const functionNamesToKeep = ["initSoldo"];
@@ -8,6 +9,7 @@ const keepFnamesRegex = new RegExp(
 );
 
 export default defineConfig({
+  plugins: [glsl()],
   optimizeDeps: {
     esbuildOptions: {
       target: "esnext",
