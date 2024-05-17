@@ -75,11 +75,11 @@ export class GameScene4 extends BaseScene {
     }, 3000);
   }
 
-  async update(_deltaTime: number): Promise<void> {
+  async update(deltaTime: number): Promise<void> {
     if (!this.active) return; // Only update if the scene is active
 
     // Update the rotation of the meshes
-    this.quad.rotation += 0.01;
+    this.quad.rotation += deltaTime * 0.01;
   }
 
   async destroy(): Promise<void> {
