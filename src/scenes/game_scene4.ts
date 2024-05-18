@@ -26,7 +26,7 @@ export class GameScene4 extends BaseScene {
       await PIXI.Assets.load("https://pixijs.com/assets/bg_rotate.jpg")
     ).source;
 
-    const geometry = new PIXI.Geometry({
+    const geometry: PIXI.Geometry = new PIXI.Geometry({
       attributes: {
         aPosition: [
           -100,
@@ -44,7 +44,7 @@ export class GameScene4 extends BaseScene {
     });
 
     // Create shader
-    const shader = PIXI.Shader.from({
+    const shader: PIXI.Shader = PIXI.Shader.from({
       gl: {
         vertex,
         fragment,

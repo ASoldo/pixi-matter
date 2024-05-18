@@ -12,7 +12,7 @@ import Matter, {
 import { sound } from "@pixi/sound";
 import { app } from "../main";
 import { keys } from "../utils/input";
-import { sineFunc } from "../components/behaviours/behaviours";
+// import { sineFunc } from "../components/behaviours/behaviours";
 import { scene_manager } from "../main";
 
 export class GameScene1 extends BaseScene {
@@ -21,7 +21,7 @@ export class GameScene1 extends BaseScene {
   private trigger!: Matter.Body;
   private platform!: Matter.Body;
   private canJump: boolean = false;
-  private startTime!: number;
+  // private startTime!: number;
   private score: number = 0;
   private scoreText!: PIXI.Text;
   private groundComposite!: Matter.Composite;
@@ -57,7 +57,7 @@ export class GameScene1 extends BaseScene {
     this.setup();
     this.initializeScore();
     this.setupCoins();
-    this.startTime = Date.now();
+    // this.startTime = Date.now();
 
     setTimeout(() => {
       scene_manager.goToScene("scene2");
@@ -66,8 +66,8 @@ export class GameScene1 extends BaseScene {
   }
 
   async setup() {
-    this.platform = Bodies.rectangle(400, 1000, 300, 30, {
-      isStatic: false,
+    this.platform = Bodies.rectangle(400, 100, 300, 30, {
+      isStatic: true,
       friction: 1,
       mass: 1,
       restitution: 0.1,
@@ -116,7 +116,7 @@ export class GameScene1 extends BaseScene {
 
     this.trigger = Bodies.rectangle(400, 0, 200, 50, {
       isSensor: true,
-      isStatic: false,
+      isStatic: true,
     });
     World.add(this.engine.world, this.trigger);
 
@@ -244,19 +244,19 @@ export class GameScene1 extends BaseScene {
   async update(_deltaTime: number): Promise<void> {
     if (!this.active) return;
 
-    const currentTime = Date.now();
-    const elapsedTime = (currentTime - this.startTime) / 1000;
+    // const currentTime = Date.now();
+    // const elapsedTime = (currentTime - this.startTime) / 1000;
 
-    const amplitude = 50;
-    const frequency = 1;
-    const newY = sineFunc(200, elapsedTime, amplitude, frequency);
-    Body.setPosition(this.trigger, { x: this.trigger.position.x, y: newY });
-
-    const frequency1 = 0.5;
-    const newY1 =
-      200 + amplitude * Math.sin(2 * Math.PI * frequency1 * elapsedTime);
-    Body.setPosition(this.platform, { x: 100, y: newY1 });
-    Body.setVelocity(this.platform, { x: 0, y: 0 });
+    // const amplitude = 50;
+    // const frequency = 1;
+    // const newY = sineFunc(200, elapsedTime, amplitude, frequency);
+    // Body.setPosition(this.trigger, { x: this.trigger.position.x, y: newY });
+    //
+    // const frequency1 = 0.5;
+    // const newY1 =
+    //   200 + amplitude * Math.sin(2 * Math.PI * frequency1 * elapsedTime);
+    // Body.setPosition(this.platform, { x: 100, y: newY1 });
+    // Body.setVelocity(this.platform, { x: 0, y: 0 });
 
     const moveSpeed = 2;
     if (keys["ArrowLeft"]) {
