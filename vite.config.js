@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import glsl from "vite-plugin-glsl";
 import path from "path";
 
-const functionNamesToKeep = ["initSoldo"];
+const functionNamesToKeep = ["setupBridge"];
 const keepFnamesRegex = new RegExp(
   functionNamesToKeep.map((name) => `^${name}$`).join("|"),
 );
@@ -22,7 +22,10 @@ export default defineConfig({
     minify: "terser",
     target: "esnext",
     terserOptions: {
+      module: true,
+      toplevel: true,
       keep_fnames: keepFnamesRegex,
+      keep_classnames: false,
     },
     assetsDir: "assets",
     rollupOptions: {

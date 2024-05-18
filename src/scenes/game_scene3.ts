@@ -1,8 +1,9 @@
-import { BaseScene } from "./base_scene";
-import { scene_manager } from "../main";
+import { BaseScene } from "../core/base_scene";
+import { scene_manager } from "../core/main";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
+import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene3 extends BaseScene {
   private platform!: Body;
@@ -20,7 +21,7 @@ export class GameScene3 extends BaseScene {
   async preload(): Promise<void> {
     try {
       [this.bunnyTexture, this.tweenBunnyTexture] = await Promise.all([
-        PIXI.Assets.load("/assets/bunny.png"),
+        PIXI.Assets.load("/assets/images/bunny.png"),
         PIXI.Assets.load("https://pixijs.com/assets/bunny.png"),
       ]);
     } catch (error) {
@@ -69,9 +70,10 @@ export class GameScene3 extends BaseScene {
       .start();
 
     console.log("Tween is", this.tween);
+    scene_manager.debug();
 
     setTimeout(() => {
-      scene_manager.goToScene("scene4");
+      scene_manager.goToScene(SceneNames.SCENE4);
     }, 3000);
     // this.loaded = true;
     this.setLoaded(true);

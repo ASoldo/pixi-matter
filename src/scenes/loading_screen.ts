@@ -1,4 +1,4 @@
-import { BaseScene } from "./base_scene";
+import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 

@@ -1,4 +1,4 @@
-import { BaseScene } from "./base_scene";
+import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import Matter, {
   Engine,
@@ -10,10 +10,12 @@ import Matter, {
   Composite,
 } from "matter-js";
 import { sound } from "@pixi/sound";
-import { app } from "../main";
-import { keys } from "../utils/input";
+import { app } from "../core/main";
+import { keys } from "../system/inputs/input";
+
 // import { sineFunc } from "../components/behaviours/behaviours";
-import { scene_manager } from "../main";
+import { scene_manager } from "../core/main";
+import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene1 extends BaseScene {
   private bunny!: PIXI.Sprite;
@@ -38,7 +40,7 @@ export class GameScene1 extends BaseScene {
   }
 
   async preload(): Promise<void> {
-    await PIXI.Assets.load("/assets/bunny.png");
+    await PIXI.Assets.load("/assets/images/bunny.png");
 
     // Check if the sound already exists before adding it
     if (!sound.exists("hit-sound")) {
@@ -60,7 +62,7 @@ export class GameScene1 extends BaseScene {
     // this.startTime = Date.now();
 
     setTimeout(() => {
-      scene_manager.goToScene("scene2");
+      scene_manager.goToScene(SceneNames.SCENE2);
     }, 3000);
     this.setLoaded(true);
   }
@@ -120,7 +122,7 @@ export class GameScene1 extends BaseScene {
     });
     World.add(this.engine.world, this.trigger);
 
-    const bunnyTexture = await PIXI.Assets.load("/assets/bunny.png");
+    const bunnyTexture = await PIXI.Assets.load("/assets/images/bunny.png");
     this.bunny = new PIXI.Sprite(bunnyTexture);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
@@ -321,7 +323,10 @@ export class GameScene1 extends BaseScene {
     World.remove(this.engine.world, this.trigger);
     World.remove(this.engine.world, this.platform);
     Composite.remove(this.engine.world, this.groundComposite, true);
+
+    // Remove coins from the world and clear the array
     this.coins.forEach((coin) => World.remove(this.engine.world, coin));
+    this.coins = [];
 
     // Remove event listeners
     Events.off(this.engine, "collisionStart", this.collisionStartHandler);

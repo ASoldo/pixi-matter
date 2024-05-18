@@ -1,9 +1,10 @@
-import { BaseScene } from "./base_scene";
+import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import vertex from "../system/shaders/demo/vert-shader.glsl";
 import fragment from "../system/shaders/demo/frag-shader.glsl";
-import { scene_manager } from "../main";
+import { scene_manager } from "../core/main";
+import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene4 extends BaseScene {
   private quad!: PIXI.Mesh;
@@ -71,7 +72,7 @@ export class GameScene4 extends BaseScene {
     this.setLoaded(true);
 
     setTimeout(() => {
-      scene_manager.goToScene("scene1");
+      scene_manager.goToScene(SceneNames.SCENE1);
     }, 3000);
   }
 

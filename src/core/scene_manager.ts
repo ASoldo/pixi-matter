@@ -1,7 +1,8 @@
 import { BaseScene } from "./base_scene";
-import { LoadingScreen } from "./loading_screen";
+import { LoadingScreen } from "../scenes/loading_screen";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
+import { SceneNames } from "../system/types/scene_names";
 
 export class SceneManager {
   private app: PIXI.Application;
@@ -10,6 +11,7 @@ export class SceneManager {
   private scenes: { [key: string]: BaseScene };
   private currentScene: BaseScene | null;
   private loadingScene: LoadingScreen;
+  public score = 0;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     this.app = app;
@@ -18,6 +20,7 @@ export class SceneManager {
     this.scenes = {};
     this.currentScene = null;
     this.loadingScene = new LoadingScreen(app, engine, render);
+    this.score = 0;
   }
 
   debug() {
@@ -27,6 +30,7 @@ export class SceneManager {
     console.log("Scenes: ", this.scenes);
     console.log("Current Scene: ", this.currentScene);
     console.log("Loading Scene: ", this.loadingScene);
+    console.log("Score", this.score);
   }
 
   addScene(name: string, scene: BaseScene): void {
@@ -34,7 +38,7 @@ export class SceneManager {
     scene.name = name;
   }
 
-  async goToScene(name: string): Promise<void> {
+  async goToScene(name: SceneNames): Promise<void> {
     if (this.currentScene) {
       this.currentScene.stop();
       await this.currentScene.unload();
@@ -56,12 +60,12 @@ export class SceneManager {
           scene.start();
           this.currentScene = scene;
           resolve();
-        }, 1000); // Simulate loading delay, replace with actual loading logic
+        }, 1000);
       });
     }
   }
 
-  jumpToScene(name: string): void {
+  jumpToScene(name: SceneNames): void {
     if (this.currentScene) {
       this.currentScene.stop();
       this.currentScene.unload();

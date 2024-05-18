@@ -1,7 +1,8 @@
-import { BaseScene } from "./base_scene";
+import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import Matter, { Engine, Render, World, Bodies } from "matter-js";
-import { scene_manager } from "../main";
+import { scene_manager } from "../core/main";
+import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene2 extends BaseScene {
   protected platform!: Matter.Body;
@@ -29,7 +30,7 @@ export class GameScene2 extends BaseScene {
     });
     World.add(this.engine.world, this.platform);
     setTimeout(() => {
-      scene_manager.goToScene("scene3");
+      scene_manager.goToScene(SceneNames.SCENE3);
     }, 3000);
     // this.loaded = true;
     this.setLoaded(true);
