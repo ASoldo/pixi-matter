@@ -72,7 +72,7 @@ export class GameScene4 extends BaseScene {
     this.setLoaded(true);
 
     setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE1);
+      scene_manager.goToScene(SceneNames.SCENE5);
     }, 3000);
   }
 

@@ -3,4 +3,5 @@ export enum SceneNames {
   SCENE2 = "GameScene2",
   SCENE3 = "GameScene3",
   SCENE4 = "GameScene4",
+  SCENE5 = "GameScene5",
 }
