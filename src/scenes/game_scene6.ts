@@ -5,18 +5,14 @@ import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene6 extends BaseScene {
-  private manifest!: any;
+  private manifest!: PIXI.AssetsManifest;
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
   }
 
   async preload(): Promise<void> {
     console.log("Preloading Game Scene 5");
-  }
 
-  async init(): Promise<void> {
-    console.log("Initializing Game: ", this.name);
-    this.loaded = false;
     this.manifest = {
       bundles: [
         {
@@ -42,14 +38,13 @@ export class GameScene6 extends BaseScene {
 
     await PIXI.Assets.init({ manifest: this.manifest });
 
-    PIXI.Assets.backgroundLoadBundle(["bunny", "bunny_remote"]);
+    await PIXI.Assets.backgroundLoadBundle(["bunny", "bunny_remote"]);
+  }
 
-    // Load the video texture
-    // Set a timeout to switch to the next scene after the video ends
-    setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE1);
-    }, 1000);
-
+  async init(): Promise<void> {
+    console.log("Initializing Game: ", this.name);
+    this.loaded = false;
+    scene_manager.goToScene(SceneNames.SCENE1);
     this.setLoaded(true);
   }
 

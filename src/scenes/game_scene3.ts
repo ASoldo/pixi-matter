@@ -49,8 +49,6 @@ export class GameScene3 extends BaseScene {
     });
     World.add(this.engine.world, this.platform);
 
-    // Load assets asynchronously
-
     // Initialize sprites
     this.bunny = new PIXI.Sprite((this.bunnyTexture as CustomTextures).bunny);
     this.bunny.anchor.set(0.5);
@@ -81,7 +79,6 @@ export class GameScene3 extends BaseScene {
     setTimeout(() => {
       scene_manager.goToScene(SceneNames.SCENE4);
     }, 3000);
-    // this.loaded = true;
     this.setLoaded(true);
   }
 
@@ -97,6 +94,21 @@ export class GameScene3 extends BaseScene {
 
   async destroy(): Promise<void> {
     console.log("Destroying Game: ", this.name);
-    // Add any cleanup specific to Game Scene 2 here
+
+    // Remove the platform from the Matter.js world
+    World.remove(this.engine.world, this.platform);
+
+    // Remove sprites from the PIXI stage and destroy them
+    this.app.stage.removeChild(this.bunny);
+    this.bunny.destroy();
+    this.bunny = null as any; // Nullify the reference for garbage collection
+
+    this.app.stage.removeChild(this.tweenBunny);
+    this.tweenBunny.destroy();
+    this.tweenBunny = null as any; // Nullify the reference for garbage collection
+
+    // Stop and clear the tween
+    this.tween?.stop();
+    this.tween = null; // Nullify the reference for garbage collection
   }
 }
