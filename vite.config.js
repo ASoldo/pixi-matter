@@ -8,7 +8,9 @@ const keepFnamesRegex = new RegExp(
   functionNamesToKeep.map((name) => `^${name}$`).join("|"),
 );
 
+/// <reference types="vitest" />
 export default defineConfig({
+  test: {},
   plugins: [glsl()],
   optimizeDeps: {
     esbuildOptions: {
