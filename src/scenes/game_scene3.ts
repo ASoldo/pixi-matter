@@ -5,6 +5,10 @@ import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
 import { SceneNames } from "../system/types/scene_names";
 
+interface CustomTextures extends PIXI.Texture {
+  bunny: PIXI.Texture;
+  bunny_remote: PIXI.Texture;
+}
 export class GameScene3 extends BaseScene {
   private platform!: Body;
   private bunny!: PIXI.Sprite;
@@ -21,8 +25,8 @@ export class GameScene3 extends BaseScene {
   async preload(): Promise<void> {
     try {
       [this.bunnyTexture, this.tweenBunnyTexture] = await Promise.all([
-        PIXI.Assets.load("/assets/images/bunny.png"),
-        PIXI.Assets.load("https://pixijs.com/assets/bunny.png"),
+        PIXI.Assets.loadBundle("bunny"),
+        PIXI.Assets.loadBundle("bunny_remote"),
       ]);
     } catch (error) {
       console.error("Error preloading assets:", error);
@@ -48,14 +52,16 @@ export class GameScene3 extends BaseScene {
     // Load assets asynchronously
 
     // Initialize sprites
-    this.bunny = new PIXI.Sprite(this.bunnyTexture);
+    this.bunny = new PIXI.Sprite((this.bunnyTexture as CustomTextures).bunny);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
     this.bunny.x = 300;
     this.bunny.y = 100;
     this.app.stage.addChild(this.bunny);
 
-    this.tweenBunny = new PIXI.Sprite(this.tweenBunnyTexture);
+    this.tweenBunny = new PIXI.Sprite(
+      (this.tweenBunnyTexture as CustomTextures).bunny_remote,
+    );
     this.tweenBunny.anchor.set(0.5);
     this.tweenBunny.pivot.set(0.5);
     this.tweenBunny.position.set(0, 300);

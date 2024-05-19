@@ -6,6 +6,7 @@ import { GameScene2 } from "./scenes/game_scene2";
 import { GameScene3 } from "./scenes/game_scene3";
 import { GameScene4 } from "./scenes/game_scene4";
 import { GameScene5 } from "./scenes/game_scene5";
+import { GameScene6 } from "./scenes/game_scene6";
 import * as PIXI from "pixi.js";
 import { Render, Runner } from "matter-js";
 import { SceneNames } from "./system/types/scene_names";
@@ -92,10 +93,15 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
       new GameScene5(app, engine, matterRender),
     );
 
+    scene_manager.addScene(
+      SceneNames.SCENE6,
+      new GameScene6(app, engine, matterRender),
+    );
+
     setupBridge(app, scene_manager);
 
     // Default to start with scene
-    scene_manager.goToScene(SceneNames.SCENE5);
+    scene_manager.goToScene(SceneNames.SCENE6);
 
     app.ticker.add((delta: PIXI.Ticker) => {
       scene_manager.update(delta.deltaTime);
