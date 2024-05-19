@@ -9,9 +9,27 @@
 </head>
 
 <body>
+  <!-- <div class="flex items-center justify-center"> -->
+  <!--   <div class="container w-auto h-screen"> -->
+  <!--     <div class="grid gap-0 md:grid-cols-12 md:grid-rows-1 grid-cols-2 grid-rows-3 md:w-auto w-screen h-screen"> -->
+  <!--       <div -->
+  <!--         class="bg-blue-500 flex items-center justify-center md:justify-start md:col-span-3 md:row-span-1 col-span-1 row-span-2 h-48 md:h-auto order-2 md:order-1"> -->
+  <!--         1 -->
+  <!--       </div> -->
+  <!--       <div -->
+  <!--         class="bg-red-500 max-w-[800px] aspect-[4/3] flex items-center justify-center md:justify-center md:col-span-6 md:row-span-1 col-span-2 row-span-1 order-1 md:order-2 grow-1"> -->
+  <!--         2 -->
+  <!--       </div> -->
+  <!--       <div -->
+  <!--         class="bg-green-500 flex items-center justify-center md:justify-end md:col-span-3 md:row-span-1 col-span-1 row-span-2 h-48 md:h-auto order-3 md:order-3"> -->
+  <!--         3 -->
+  <!--       </div> -->
+  <!--     </div> -->
+  <!--   </div> -->
+  <!-- </div> -->
+
   <div class="bg-gray-800 flex flex-col md:flex-row justify-center items-center h-screen m-0 p-4 md:p-0">
-    <!-- Directional Pad (landscape) -->
-    <div class="hidden md:flex flex-col items-center mr-8">
+    <div class="hidden md:flex flex-col items-center">
       <button data-action="up-arrow"
         class="w-12 h-12 bg-gray-700 hover:bg-gray-600 focus:outline-none mb-2 select-none flex justify-center items-center text-white">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -40,17 +58,12 @@
         </svg>
       </button>
     </div>
-
-    <!-- Canvas -->
-    <div class="relative w-full max-w-[800px] h-auto overflow-hidden bg-black mb-4 md:mx-8" style="aspect-ratio: 4 / 3">
+    <div class="relative w-full max-w-[800px] h-auto overflow-hidden bg-black m-2" style="aspect-ratio: 4 / 3">
       <div id="matter-debug-container" class="absolute inset-0 z-10"></div>
       <div id="pixi-container" class="absolute inset-0 z-0 aspect-video"></div>
     </div>
-
-    <!-- Controller Section (portrait) -->
     <div class="flex flex-col md:hidden justify-center items-center max-w-[600px] mb-4">
       <div class="flex w-full">
-        <!-- Directional Pad -->
         <div class="flex flex-col items-center mr-8">
           <button data-action="up-arrow"
             class="w-12 h-12 bg-gray-700 hover:bg-gray-600 focus:outline-none mb-2 select-none flex justify-center items-center text-white">
@@ -80,8 +93,6 @@
             </svg>
           </button>
         </div>
-
-        <!-- A and B Buttons -->
         <div class="flex flex-col justify-between">
           <button data-action="button-a"
             class="w-12 h-12 rounded-full bg-red-600 hover:bg-red-500 focus:outline-none ml-14 select-none text-white">
@@ -94,28 +105,26 @@
         </div>
       </div>
     </div>
-
-    <!-- A and B Buttons (landscape) -->
-    <div class="hidden md:flex flex-col justify-center items-center ml-8">
+    <div class="hidden md:flex flex-col justify-around items-center ml-10 h-48 w-36">
       <button data-action="button-a"
         class="w-12 h-12 rounded-full bg-red-600 hover:bg-red-500 focus:outline-none mb-4 select-none text-white">
         A
       </button>
       <button data-action="button-b"
-        class="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none select-none text-white">
+        class="mr-16 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none select-none text-white">
         B
       </button>
     </div>
   </div>
   <script type="module" src="/src/main.ts"></script>
+  <!-- <body> -->
+  <!--   <div class="absolute top-0 left-0 right-0 bottom-0 w-full h-full"> -->
+  <!--     <div id="matter-debug-container" class="absolute inset-0 z-10"></div> -->
+  <!--     <div id="pixi-container" class="absolute inset-0"></div> -->
+  <!--   </div> -->
+  <!---->
+  <script type="module" src="/src/main.ts"></script>
+  <!-- </body> -->
 </body>
-<!-- <body> -->
-<!--   <div class="absolute top-0 left-0 right-0 bottom-0 w-full h-full"> -->
-<!--     <div id="matter-debug-container" class="absolute inset-0 z-10"></div> -->
-<!--     <div id="pixi-container" class="absolute inset-0"></div> -->
-<!--   </div> -->
-<!---->
-<!--   <script type="module" src="/src/main.ts"></script> -->
-<!-- </body> -->
 
 </html>
