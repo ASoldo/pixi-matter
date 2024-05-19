@@ -1,7 +1,7 @@
 import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import Matter, { Engine, Render, World, Bodies } from "matter-js";
-import { scene_manager } from "../core/main";
+import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene2 extends BaseScene {

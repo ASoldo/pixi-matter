@@ -10,11 +10,11 @@ import Matter, {
   Composite,
 } from "matter-js";
 import { sound } from "@pixi/sound";
-import { app } from "../core/main";
+import { app } from "../core/core";
 import { keys } from "../system/inputs/input";
 
 // import { sineFunc } from "../components/behaviours/behaviours";
-import { scene_manager } from "../core/main";
+import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene1 extends BaseScene {

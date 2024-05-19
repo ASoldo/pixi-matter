@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import vertex from "../system/shaders/demo/vert-shader.glsl";
 import fragment from "../system/shaders/demo/frag-shader.glsl";
-import { scene_manager } from "../core/main";
+import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene4 extends BaseScene {

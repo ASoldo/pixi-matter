@@ -1,5 +1,5 @@
 import { BaseScene } from "../core/base_scene";
-import { scene_manager } from "../core/main";
+import { scene_manager } from "../core/core";
 import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
