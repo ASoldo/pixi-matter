@@ -37,12 +37,15 @@ export class GameScene5 extends BaseScene {
     this.app.stage.addChild(this.videoSprite);
 
     // Example of how to pause the video
-    // this.texture.source.resource.pause();
+    // (this.texture.source.resource as HTMLVideoElement).pause();
 
     // Set a timeout to switch to the next scene after the video ends
-    setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE1);
-    }, this.texture.source.resource.duration * 1000); // Convert seconds to milliseconds
+    setTimeout(
+      () => {
+        scene_manager.goToScene(SceneNames.SCENE1);
+      },
+      (this.texture.source.resource as HTMLVideoElement).duration * 1000,
+    ); // Convert seconds to milliseconds
 
     this.setLoaded(true);
   }
