@@ -8,6 +8,7 @@ import { GameScene4 } from "./scenes/game_scene4";
 import * as PIXI from "pixi.js";
 import { Render, Runner } from "matter-js";
 import { SceneNames } from "./system/types/scene_names";
+import { setupButton } from "./system/inputs/input";
 
 import { app, scene_manager, matterRender, engine, runner } from "./core/core";
 
@@ -30,6 +31,36 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
     document
       .getElementById("pixi-container")
       ?.appendChild(app.canvas as HTMLCanvasElement);
+
+    document.querySelectorAll("[data-action]").forEach((element) => {
+      const action = element.getAttribute("data-action");
+      if (action) {
+        let key = "";
+        switch (action) {
+          case "left-arrow":
+            key = "ArrowLeft";
+            break;
+          case "right-arrow":
+            key = "ArrowRight";
+            break;
+          case "up-arrow":
+            key = "ArrowUp";
+            break;
+          case "down-arrow":
+            key = "ArrowDown";
+            break;
+          case "button-a":
+            key = "Space";
+            break;
+          case "button-b":
+            key = "Enter";
+            break;
+        }
+        if (key) {
+          setupButton(element as HTMLElement, key);
+        }
+      }
+    });
 
     Render.run(matterRender);
     Runner.run(runner, engine);
