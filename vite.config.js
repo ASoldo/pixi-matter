@@ -10,7 +10,10 @@ const keepFnamesRegex = new RegExp(
 
 /// <reference types="vitest" />
 export default defineConfig({
-  test: {},
+  test: {
+    globals: true,
+    environment: "jsdom",
+  },
   plugins: [glsl()],
   optimizeDeps: {
     esbuildOptions: {
