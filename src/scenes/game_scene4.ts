@@ -68,7 +68,10 @@ export class GameScene4 extends BaseScene {
     }) as PIXI.Mesh;
 
     // Set positions
-    this.quad.position.set(400, 300);
+    this.quad.position.set(
+      this.app.screen.width / 2,
+      this.app.screen.height / 2,
+    );
     this.quad.width = this.app.screen.width;
     this.quad.height = this.app.screen.height;
 
