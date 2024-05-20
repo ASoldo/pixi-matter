@@ -1,16 +1,18 @@
 #version 300 es
 
-in vec2 aPosition; // Input vertex position
-in vec2 aUV; // Input texture coordinates (UV)
+precision mediump float;
 
-out vec2 vUV; // Output texture coordinates (UV) to fragment shader
+in vec2 aPosition;
+in vec2 aUV;
 
-uniform mat3 uProjectionMatrix; // Projection matrix
-uniform mat3 uWorldTransformMatrix; // World transform matrix
-uniform mat3 uTransformMatrix; // Model transform matrix
+uniform mat3 uProjectionMatrix;
+uniform mat3 uWorldTransformMatrix;
+uniform mat3 uTransformMatrix;
+
+out vec2 vUVs;
 
 void main() {
-    mat3 mvp = uProjectionMatrix * uWorldTransformMatrix * uTransformMatrix; // Combine matrices
-    gl_Position = vec4((mvp * vec3(aPosition, 1.0)).xy, 0.0, 1.0); // Transform position
-    vUV = aUV; // Pass UV to fragment shader
+    vUVs = aUV;
+    mat3 mvp = uProjectionMatrix * uWorldTransformMatrix * uTransformMatrix;
+    gl_Position = vec4((mvp * vec3(aPosition, 1.0)).xy, 0.0, 1.0);
 }
