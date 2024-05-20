@@ -111,6 +111,8 @@ export class GameScene4 extends BaseScene {
     this.app.stage.removeChild(this.quad);
     this.quad.destroy();
 
+    await PIXI.Assets.unload(this.noise_texture.source.label);
+
     this.tween?.stop();
     this.tween = null;
   }

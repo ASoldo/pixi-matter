@@ -55,7 +55,7 @@ export class GameScene5 extends BaseScene {
   }
 
   async destroy(): Promise<void> {
-    PIXI.Assets.unload(this.texture.source.label);
+    await PIXI.Assets.unload(this.texture.source.label);
     this.videoSprite.destroy();
     console.log("Destroying Game: ", this.name);
   }
