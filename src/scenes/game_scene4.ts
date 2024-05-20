@@ -10,7 +10,7 @@ import * as TWEEN from "@tweenjs/tween.js";
 export class GameScene4 extends BaseScene {
   private quad!: PIXI.Mesh;
   private noise_texture!: PIXI.Texture;
-  private tween!: TWEEN.Tween<Number> | null;
+  private tween!: TWEEN.Tween<Object> | null;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
@@ -85,7 +85,7 @@ export class GameScene4 extends BaseScene {
     this.tween = new TWEEN.Tween(
       this.quad.shader.resources.noise_uniforms.uniforms,
     )
-      .to({ limit: 1 }, 1500)
+      .to({ limit: 1, color: [1.0, 0.0, 0.0] }, 1500)
       .easing(TWEEN.Easing.Quadratic.InOut)
       .yoyo(true)
       .repeat(Infinity)
