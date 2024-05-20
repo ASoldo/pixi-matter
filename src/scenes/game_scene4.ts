@@ -1,8 +1,8 @@
 import { BaseScene } from "../core/base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
-import vertex from "../system/shaders/demo/vert-shader.glsl";
-import noise_fragment from "../system/shaders/noise_shader/noise_frag.glsl";
+import vertex from "../system/shaders/demo/vert_shader.glsl";
+import frag_noise from "../system/shaders/noise_shader/frag_noise.glsl";
 import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
@@ -18,17 +18,16 @@ export class GameScene4 extends BaseScene {
 
   async preload(): Promise<void> {
     console.log("Preloading Game Scene 4");
-    await PIXI.Assets.load("https://pixijs.com/assets/perlin.jpg");
-  }
-
-  async init(): Promise<void> {
-    console.log("Initializing Game: ", this.name);
-    this.loaded = false;
 
     // Load the texture
     this.noise_texture = (
       await PIXI.Assets.load("https://pixijs.com/assets/perlin.jpg")
     ).source;
+  }
+
+  async init(): Promise<void> {
+    console.log("Initializing Game: ", this.name);
+    this.loaded = false;
 
     const geometry: PIXI.Geometry = new PIXI.Geometry({
       attributes: {
@@ -51,11 +50,10 @@ export class GameScene4 extends BaseScene {
     const shader: PIXI.Shader = PIXI.Shader.from({
       gl: {
         vertex,
-        fragment: noise_fragment,
+        fragment: frag_noise,
       },
 
       resources: {
-        uTexture: this.noise_texture,
         noiseUniforms: {
           limit: { type: "f32", value: 0.5 },
         },
@@ -76,9 +74,10 @@ export class GameScene4 extends BaseScene {
 
     // Add meshes to the stage
     this.app.stage.addChild(this.quad);
+
     // Set the loaded flag
     this.setLoaded(true);
-    // this.startTime = performance.now();
+
     setTimeout(() => {
       scene_manager.goToScene(SceneNames.SCENE5);
     }, 3000);
@@ -88,9 +87,10 @@ export class GameScene4 extends BaseScene {
     if (!this.active) return; // Only update if the scene is active
 
     this.elapsedTime += deltaTime;
+
     // Update the rotation of the meshes
     // this.quad.rotation += deltaTime * 0.01;
-    // const elapsedTime = (performance.now() - this.startTime) / 1000;
+
     this.quad.shader.resources.noiseUniforms.uniforms.limit = Math.abs(
       Math.sin(this.elapsedTime * 0.005),
     );
@@ -98,7 +98,10 @@ export class GameScene4 extends BaseScene {
 
   async destroy(): Promise<void> {
     console.log("Destroying Game: ", this.name);
+
+    // Reset scene variables
     this.elapsedTime = 0;
+
     // Remove meshes from the stage and destroy them
     this.app.stage.removeChild(this.quad);
     this.quad.destroy();
