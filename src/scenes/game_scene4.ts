@@ -54,10 +54,11 @@ export class GameScene4 extends BaseScene {
       },
 
       resources: {
-        noiseUniforms: {
+        noise_uniforms: {
           limit: { type: "f32", value: 0.5 },
+          color: { type: "vec3<f32>", value: [0.0, 0.0, 0.0] },
         },
-        noise: this.noise_texture,
+        noise: this.noise_texture.source,
       },
     });
 
@@ -94,7 +95,7 @@ export class GameScene4 extends BaseScene {
     // Update the rotation of the meshes
     // this.quad.rotation += deltaTime * 0.01;
 
-    this.quad.shader.resources.noiseUniforms.uniforms.limit = Math.abs(
+    this.quad.shader.resources.noise_uniforms.uniforms.limit = Math.abs(
       Math.sin(this.elapsedTime * 0.005),
     );
   }

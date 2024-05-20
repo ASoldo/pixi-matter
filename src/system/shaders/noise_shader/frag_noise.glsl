@@ -5,11 +5,12 @@ precision mediump float;
 in vec2 vUVs;
 uniform float limit;
 uniform sampler2D noise;
+uniform vec3 color;
 
 out vec4 outColor;
 
 void main() {
-    float color = texture(noise, vUVs).r;
-    color = step(limit, color);
-    outColor = vec4(color, color, color, 0.0); // Ensure to set alpha to 1.0
+    float tex = texture(noise, vUVs).r;
+    tex = step(limit, tex);
+    outColor = vec4(color * tex, tex); // Ensure to set alpha to 1.0
 }
