@@ -6,8 +6,32 @@ import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene2 extends BaseScene {
   protected platform!: Matter.Body;
+  protected p0: PIXI.Point = new PIXI.Point(50, 300);
+  protected p1: PIXI.Point = new PIXI.Point(100, 200);
+  protected p2: PIXI.Point = new PIXI.Point(200, 200);
+  protected p3: PIXI.Point = new PIXI.Point(240, 100);
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
+  }
+
+  getCubicBezierPoint(
+    t: number,
+    p0: PIXI.Point,
+    p1: PIXI.Point,
+    p2: PIXI.Point,
+    p3: PIXI.Point,
+  ): PIXI.Point {
+    const x =
+      (1 - t) ** 3 * p0.x +
+      3 * (1 - t) ** 2 * t * p1.x +
+      3 * (1 - t) * t ** 2 * p2.x +
+      t ** 3 * p3.x;
+    const y =
+      (1 - t) ** 3 * p0.y +
+      3 * (1 - t) ** 2 * t * p1.y +
+      3 * (1 - t) * t ** 2 * p2.y +
+      t ** 3 * p3.y;
+    return new PIXI.Point(x, y);
   }
 
   async preload(): Promise<void> {
@@ -29,6 +53,47 @@ export class GameScene2 extends BaseScene {
       label: "ground",
     });
     World.add(this.engine.world, this.platform);
+
+    const path = new PIXI.Graphics();
+    path.moveTo(this.p0.x, this.p0.y);
+    path.lineTo(this.p1.x, this.p1.y);
+    path.lineTo(this.p2.x, this.p2.y);
+    path.lineTo(this.p3.x, this.p3.y);
+    path.stroke({ width: 2, color: 0x00ff00 });
+
+    path.position.set(100, 100);
+    this.app.stage.addChild(path);
+
+    const bezier = new PIXI.Graphics();
+    bezier.moveTo(this.p0.x, this.p0.y);
+    bezier.bezierCurveTo(
+      this.p1.x,
+      this.p1.y,
+      this.p2.x,
+      this.p2.y,
+      this.p3.x,
+      this.p3.y,
+    );
+    bezier.stroke({ width: 2, color: 0xff0000 });
+    bezier.position.set(100, 100);
+    this.app.stage.addChild(bezier);
+
+    const interval = 1 / 10;
+    for (let t = 0; t <= 1; t += interval) {
+      const point = this.getCubicBezierPoint(
+        t,
+        this.p0,
+        this.p1,
+        this.p2,
+        this.p3,
+      );
+      const circle = new PIXI.Graphics();
+      circle.circle(0, 0, 5);
+      circle.fill(0x0000ff);
+      circle.position.set(point.x + 100, point.y + 100);
+      this.app.stage.addChild(circle);
+    }
+
     setTimeout(() => {
       scene_manager.goToScene(SceneNames.SCENE3);
     }, 3000);
@@ -43,6 +108,7 @@ export class GameScene2 extends BaseScene {
 
   async destroy(): Promise<void> {
     console.log("Destroying Game: ", this.name);
+    World.remove(this.engine.world, this.platform);
     // Add any cleanup specific to Game Scene 2 here
   }
 }

@@ -11,6 +11,8 @@ export class GameScene4 extends BaseScene {
   private quad!: PIXI.Mesh;
   private noise_texture!: PIXI.Texture;
   private tween!: TWEEN.Tween<Object> | null;
+  private bunny!: PIXI.Sprite;
+  private bunnyTexture!: PIXI.Texture;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
@@ -23,6 +25,10 @@ export class GameScene4 extends BaseScene {
     this.noise_texture = (
       await PIXI.Assets.load("https://pixijs.com/assets/perlin.jpg")
     ).source;
+
+    this.bunnyTexture = await PIXI.Assets.load(
+      "https://pixijs.com/assets/bunny.png",
+    );
   }
 
   async init(): Promise<void> {
@@ -78,6 +84,13 @@ export class GameScene4 extends BaseScene {
 
     // Add meshes to the stage
     this.app.stage.addChild(this.quad);
+    this.quad.zIndex = 1;
+
+    this.bunny = new PIXI.Sprite(this.bunnyTexture);
+    this.bunny.anchor.set(0.5);
+    this.bunny.x = this.app.screen.width / 2;
+    this.bunny.y = this.app.screen.height / 2;
+    this.app.stage.addChild(this.bunny);
 
     // Set the loaded flag
     this.setLoaded(true);
