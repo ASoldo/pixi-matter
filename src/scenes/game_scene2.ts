@@ -8,10 +8,10 @@ import { getCubicBezierPoint } from "../system/utils/curves/getCubicBezierPoint"
 
 export class GameScene2 extends BaseScene {
   protected platform!: Matter.Body;
-  protected p0: PIXI.Point = new PIXI.Point(50, 300);
-  protected p1: PIXI.Point = new PIXI.Point(100, 200);
-  protected p2: PIXI.Point = new PIXI.Point(200, 200);
-  protected p3: PIXI.Point = new PIXI.Point(240, 100);
+  protected p0: PIXI.Point = new PIXI.Point(0, 0);
+  protected p1: PIXI.Point = new PIXI.Point(100, 400);
+  protected p2: PIXI.Point = new PIXI.Point(400, 100);
+  protected p3: PIXI.Point = new PIXI.Point(600, 400);
   private tween!: TWEEN.Tween<Object> | null;
   private animatedCircle!: PIXI.Graphics;
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
@@ -59,6 +59,8 @@ export class GameScene2 extends BaseScene {
       this.p3.y,
     );
     bezier.stroke({ width: 2, color: 0xff0000 });
+    // bezier.fill(0x00ff00);
+    // bezier.closePath();
     bezier.position.set(100, 100);
     this.app.stage.addChild(bezier);
 
