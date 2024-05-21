@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import Matter, { Engine, Render, World, Bodies } from "matter-js";
 import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
+import * as TWEEN from "@tweenjs/tween.js";
 import { getCubicBezierPoint } from "../system/utils/curves/getCubicBezierPoint";
 
 export class GameScene2 extends BaseScene {
@@ -11,6 +12,8 @@ export class GameScene2 extends BaseScene {
   protected p1: PIXI.Point = new PIXI.Point(100, 200);
   protected p2: PIXI.Point = new PIXI.Point(200, 200);
   protected p3: PIXI.Point = new PIXI.Point(240, 100);
+  private tween!: TWEEN.Tween<Object> | null;
+  private animatedCircle!: PIXI.Graphics;
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
   }
@@ -69,6 +72,31 @@ export class GameScene2 extends BaseScene {
       this.app.stage.addChild(circle);
     }
 
+    this.animatedCircle = new PIXI.Graphics();
+    this.animatedCircle.circle(0, 0, 10);
+    this.animatedCircle.stroke({ width: 2, color: 0xff00ff });
+    this.animatedCircle.position.set(this.p0.x + 100, this.p0.y + 100);
+    this.app.stage.addChild(this.animatedCircle);
+
+    const animationData = { t: 0 };
+
+    this.tween = new TWEEN.Tween(animationData)
+      .to({ t: 1 }, 1500)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onUpdate(() => {
+        const point = getCubicBezierPoint(
+          animationData.t,
+          this.p0,
+          this.p1,
+          this.p2,
+          this.p3,
+        );
+        this.animatedCircle.position.set(point.x + 100, point.y + 100);
+      })
+      .yoyo(true)
+      .repeat(Infinity)
+      .start();
+
     setTimeout(() => {
       scene_manager.goToScene(SceneNames.SCENE3);
     }, 3000);
@@ -79,11 +107,14 @@ export class GameScene2 extends BaseScene {
   async update(_deltaTime: number): Promise<void> {
     if (!this.active) return; // Only update if the scene is active
     // console.log("Updating Game Scene 2 and deltaTime is", deltaTime);
+    TWEEN.update();
   }
 
   async destroy(): Promise<void> {
     console.log("Destroying Game: ", this.name);
     World.remove(this.engine.world, this.platform);
     // Add any cleanup specific to Game Scene 2 here
+    this.tween?.stop();
+    this.animatedCircle.destroy();
   }
 }
