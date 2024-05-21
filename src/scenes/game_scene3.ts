@@ -98,14 +98,13 @@ export class GameScene3 extends BaseScene {
     // Remove the platform from the Matter.js world
     World.remove(this.engine.world, this.platform);
 
-    // Remove sprites from the PIXI stage and destroy them
-    this.app.stage.removeChild(this.bunny);
+    await PIXI.Assets.unloadBundle(this.bunny.label);
     this.bunny.destroy();
-    this.bunny = null as any; // Nullify the reference for garbage collection
+    this.app.stage.removeChild(this.bunny);
 
-    this.app.stage.removeChild(this.tweenBunny);
+    await PIXI.Assets.unloadBundle(this.tweenBunny.label);
     this.tweenBunny.destroy();
-    this.tweenBunny = null as any; // Nullify the reference for garbage collection
+    this.app.stage.removeChild(this.tweenBunny);
 
     // Stop and clear the tween
     this.tween?.stop();
