@@ -126,6 +126,9 @@ export class GameScene4 extends BaseScene {
 
     await PIXI.Assets.unload(this.noise_texture.source.label);
 
+    await PIXI.Assets.unload(this.bunnyTexture.source.label);
+    this.bunny.destroy();
+
     this.tween?.stop();
     this.tween = null;
   }

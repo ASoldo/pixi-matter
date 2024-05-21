@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import Matter, { Engine, Render, World, Bodies } from "matter-js";
 import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
+import { getCubicBezierPoint } from "../system/utils/curves/getCubicBezierPoint";
 
 export class GameScene2 extends BaseScene {
   protected platform!: Matter.Body;
@@ -12,26 +13,6 @@ export class GameScene2 extends BaseScene {
   protected p3: PIXI.Point = new PIXI.Point(240, 100);
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
     super(app, engine, render);
-  }
-
-  getCubicBezierPoint(
-    t: number,
-    p0: PIXI.Point,
-    p1: PIXI.Point,
-    p2: PIXI.Point,
-    p3: PIXI.Point,
-  ): PIXI.Point {
-    const x =
-      (1 - t) ** 3 * p0.x +
-      3 * (1 - t) ** 2 * t * p1.x +
-      3 * (1 - t) * t ** 2 * p2.x +
-      t ** 3 * p3.x;
-    const y =
-      (1 - t) ** 3 * p0.y +
-      3 * (1 - t) ** 2 * t * p1.y +
-      3 * (1 - t) * t ** 2 * p2.y +
-      t ** 3 * p3.y;
-    return new PIXI.Point(x, y);
   }
 
   async preload(): Promise<void> {
@@ -80,13 +61,7 @@ export class GameScene2 extends BaseScene {
 
     const interval = 1 / 10;
     for (let t = 0; t <= 1; t += interval) {
-      const point = this.getCubicBezierPoint(
-        t,
-        this.p0,
-        this.p1,
-        this.p2,
-        this.p3,
-      );
+      const point = getCubicBezierPoint(t, this.p0, this.p1, this.p2, this.p3);
       const circle = new PIXI.Graphics();
       circle.circle(0, 0, 5);
       circle.fill(0x0000ff);
