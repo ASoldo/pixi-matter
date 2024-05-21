@@ -98,13 +98,13 @@ export class GameScene3 extends BaseScene {
     // Remove the platform from the Matter.js world
     World.remove(this.engine.world, this.platform);
 
-    await PIXI.Assets.unloadBundle(this.bunny.label);
-    this.bunny.destroy();
+    await PIXI.Assets.unloadBundle("bunny");
     this.app.stage.removeChild(this.bunny);
+    this.bunny.destroy();
 
-    await PIXI.Assets.unloadBundle(this.tweenBunny.label);
-    this.tweenBunny.destroy();
+    await PIXI.Assets.unloadBundle("bunny_remote");
     this.app.stage.removeChild(this.tweenBunny);
+    this.tweenBunny.destroy();
 
     // Stop and clear the tween
     this.tween?.stop();
