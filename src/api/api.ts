@@ -1,5 +1,5 @@
 // Define interfaces for the data structures
-interface Asset {
+type Asset = {
   alias: string;
   collectionId: string;
   collectionName: string;
@@ -8,9 +8,9 @@ interface Asset {
   img: string;
   src: string;
   updated: string;
-}
+};
 
-interface Bundle {
+type Bundle = {
   id: string;
   collectionId: string;
   collectionName: string;
@@ -21,15 +21,15 @@ interface Bundle {
   expand: {
     assets: Asset[];
   };
-}
+};
 
-interface ApiResponse {
+type ApiResponse = {
   page: number;
   perPage: number;
   totalItems: number;
   totalPages: number;
   items: Bundle[];
-}
+};
 
 const apiUrl =
   import.meta.env.VITE_POCKETBASE_API_URL + "/collections/bundles/records";
