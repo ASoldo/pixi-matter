@@ -26,3 +26,9 @@ dist-ssr
 # Build outputs
 android
 ios
+
+# Pocketbase files
+pb_data
+
+# Secrets
+.env

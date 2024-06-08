@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
+import { fetchGameRecords } from "../api/api";
 
 export class GameScene6 extends BaseScene {
   private manifest!: PIXI.AssetsManifest;
@@ -44,6 +45,8 @@ export class GameScene6 extends BaseScene {
   async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
     this.loaded = false;
+    const records = await fetchGameRecords();
+    console.log("Fetched records: ", records);
     scene_manager.goToScene(SceneNames.SCENE1);
     this.setLoaded(true);
   }
