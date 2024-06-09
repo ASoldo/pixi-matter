@@ -1,8 +1,8 @@
-import { BaseScene } from "../core/base_scene";
+import { BaseScene } from "./base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 
-export class LoadingScreen extends BaseScene {
+export class LoadingScene extends BaseScene {
   private loadingText?: PIXI.Text;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {

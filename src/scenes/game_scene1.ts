@@ -33,8 +33,13 @@ export class GameScene1 extends BaseScene {
     event: Matter.IEventCollision<Matter.Engine>,
   ) => void;
 
-  constructor(app: PIXI.Application, engine: Engine, render: Render) {
-    super(app, engine, render);
+  constructor(
+    app: PIXI.Application,
+    engine: Engine,
+    render: Render,
+    nextScene: string,
+  ) {
+    super(app, engine, render, nextScene);
   }
 
   async preload(): Promise<void> {
@@ -52,6 +57,7 @@ export class GameScene1 extends BaseScene {
   async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
     this.loaded = false;
+    console.log("NextScene: ", this.nextScene);
 
     // Initialize game elements
     this.setup();
@@ -59,7 +65,7 @@ export class GameScene1 extends BaseScene {
     this.setupCoins();
 
     setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE2);
+      scene_manager.goToScene(this.nextScene as SceneNames);
     }, 3000);
     this.setLoaded(true);
   }

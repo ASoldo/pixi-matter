@@ -6,16 +6,22 @@ import { GameScene2 } from "./scenes/game_scene2";
 import { GameScene3 } from "./scenes/game_scene3";
 import { GameScene4 } from "./scenes/game_scene4";
 import { GameScene5 } from "./scenes/game_scene5";
-import { SplashScene } from "./scenes/splash_scene";
+import { SplashScene } from "./core/splash_scene";
 import * as PIXI from "pixi.js";
 import { Render, Runner } from "matter-js";
 import { SceneNames } from "./system/types/scene_names";
 import { setupButton } from "./system/inputs/input";
+import { fetchGameConfig } from "./api/game_config_api";
 
 import { app, scene_manager, matterRender, engine, runner } from "./core/core";
 
 (async () => {
   try {
+    // Fetch game configuration
+    const gameConfigs = await fetchGameConfig();
+    const gameConfig = gameConfigs[0]; // Assuming you want the first configuration
+    console.log("Game Config: ", gameConfig);
+
     await app.init({
       width: 800,
       height: 600,
@@ -71,31 +77,68 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
       matterRender.canvas.style.width = "100%";
     }
 
-    scene_manager.addScene(
-      SceneNames.SCENE1,
-      new GameScene1(app, engine, matterRender),
-    );
-    scene_manager.addScene(
-      SceneNames.SCENE2,
-      new GameScene2(app, engine, matterRender),
-    );
-    scene_manager.addScene(
-      SceneNames.SCENE3,
-      new GameScene3(app, engine, matterRender),
-    );
-    scene_manager.addScene(
-      SceneNames.SCENE4,
-      new GameScene4(app, engine, matterRender),
-    );
+    const sceneMap = [
+      GameScene1,
+      GameScene2,
+      GameScene3,
+      GameScene4,
+      GameScene5,
+    ];
+    console.log("Scene Map: ", sceneMap);
 
-    scene_manager.addScene(
-      SceneNames.SCENE5,
-      new GameScene5(app, engine, matterRender),
-    );
+    for (let i = 0; i < sceneMap.length; i++) {
+      const sceneClass = sceneMap[i];
+      const sceneName = sceneClass.name; // Get the name of the scene class
 
+      // Find the index of the scene in the gameConfig that matches the SceneClass name
+      const configSceneIndex = gameConfig.scenes.findIndex(
+        (configScene) => configScene.scene === sceneName,
+      );
+
+      if (configSceneIndex !== -1) {
+        // Determine the next scene index, looping back to the first scene if at the end
+        const nextSceneIndex =
+          (configSceneIndex + 1) % gameConfig.scenes.length;
+        const nextScene = gameConfig.scenes[nextSceneIndex].scene;
+
+        scene_manager.addScene(
+          gameConfig.scenes[configSceneIndex].scene as SceneNames,
+          new sceneClass(app, engine, matterRender, nextScene),
+        );
+        console.log(
+          "Scene added: ",
+          gameConfig.scenes[configSceneIndex].scene,
+          " -> ",
+          nextScene,
+        );
+      }
+    }
+
+    // scene_manager.addScene(
+    //   SceneNames.SCENE1,
+    //   new GameScene1(app, engine, matterRender, gameConfig.scenes[1].scene),
+    // );
+    // scene_manager.addScene(
+    //   SceneNames.SCENE2,
+    //   new GameScene2(app, engine, matterRender),
+    // );
+    // scene_manager.addScene(
+    //   SceneNames.SCENE3,
+    //   new GameScene3(app, engine, matterRender, gameConfig.scenes[0].scene),
+    // );
+    // scene_manager.addScene(
+    //   SceneNames.SCENE4,
+    //   new GameScene4(app, engine, matterRender),
+    // );
+    //
+    // scene_manager.addScene(
+    //   SceneNames.SCENE5,
+    //   new GameScene5(app, engine, matterRender),
+    // );
+    //
     scene_manager.addScene(
       SceneNames.SPLASH_SCENE,
-      new SplashScene(app, engine, matterRender),
+      new SplashScene(app, engine, matterRender, gameConfig.scenes[0].scene),
     );
 
     setupBridge(app, scene_manager);

@@ -8,8 +8,13 @@ export class GameScene5 extends BaseScene {
   // public texture!: PIXI.Texture;
   // public videoSprite!: PIXI.Sprite;
 
-  constructor(app: PIXI.Application, engine: Engine, render: Render) {
-    super(app, engine, render);
+  constructor(
+    app: PIXI.Application,
+    engine: Engine,
+    render: Render,
+    nextScene: string,
+  ) {
+    super(app, engine, render, nextScene);
   }
 
   async preload(): Promise<void> {
@@ -90,7 +95,7 @@ export class GameScene5 extends BaseScene {
 
     setTimeout(
       () => {
-        scene_manager.goToScene(SceneNames.SCENE1);
+        scene_manager.goToScene(this.nextScene as SceneNames);
       },
       /* (this.texture.source.resource as HTMLVideoElement).duration * 1000, */
       3000,

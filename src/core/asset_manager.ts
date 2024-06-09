@@ -1,17 +1,7 @@
 import * as PIXI from "pixi.js";
+import { AssetRecord, BundleRecord } from "../api/api";
 
-interface AssetRecord {
-  alias: string;
-  imgUrl: string;
-  src: string;
-}
-
-interface BundleRecord {
-  name: string;
-  assets: AssetRecord[];
-}
-
-class AssetManager {
+export class AssetManager {
   private manifest: PIXI.AssetsManifest | null = null;
 
   async loadManifest(records: BundleRecord[]): Promise<void> {

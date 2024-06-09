@@ -1,5 +1,5 @@
 // Define interfaces for the data structures
-type Asset = {
+export type Asset = {
   alias: string;
   collectionId: string;
   collectionName: string;
@@ -10,7 +10,7 @@ type Asset = {
   updated: string;
 };
 
-type Bundle = {
+export type Bundle = {
   id: string;
   collectionId: string;
   collectionName: string;
@@ -23,12 +23,23 @@ type Bundle = {
   };
 };
 
-type ApiResponse = {
+export type ApiResponse = {
   page: number;
   perPage: number;
   totalItems: number;
   totalPages: number;
   items: Bundle[];
+};
+
+export type AssetRecord = {
+  alias: string;
+  imgUrl: string;
+  src: string;
+};
+
+export type BundleRecord = {
+  name: string;
+  assets: AssetRecord[];
 };
 
 const apiUrl =

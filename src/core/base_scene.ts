@@ -8,20 +8,26 @@ export abstract class BaseScene {
   protected active: boolean;
   protected loaded: boolean; // Flag to track if the scene is fully loaded
   public name: string;
+  protected nextScene?: string;
 
-  constructor(app: PIXI.Application, engine: Engine, render: Render) {
+  constructor(
+    app: PIXI.Application,
+    engine: Engine,
+    render: Render,
+    nextScene?: string,
+  ) {
     this.app = app;
     this.engine = engine;
     this.render = render;
     this.active = false;
     this.loaded = false;
     this.name = "";
+    this.nextScene = nextScene;
   }
 
   abstract init(): Promise<void>;
   abstract update(deltaTime: number): Promise<void>;
   abstract destroy(): Promise<void>;
-
   abstract preload(): Promise<void>;
 
   start(): void {

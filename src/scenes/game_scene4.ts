@@ -14,8 +14,13 @@ export class GameScene4 extends BaseScene {
   private bunny!: PIXI.Sprite;
   private bunnyTexture!: PIXI.Texture;
 
-  constructor(app: PIXI.Application, engine: Engine, render: Render) {
-    super(app, engine, render);
+  constructor(
+    app: PIXI.Application,
+    engine: Engine,
+    render: Render,
+    nextScene: string,
+  ) {
+    super(app, engine, render, nextScene);
   }
 
   async preload(): Promise<void> {
@@ -105,7 +110,7 @@ export class GameScene4 extends BaseScene {
       .start();
 
     setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE5);
+      scene_manager.goToScene(this.nextScene as SceneNames);
     }, 3000);
   }
 

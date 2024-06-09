@@ -20,6 +20,9 @@ importers:
       pixi.js:
         specifier: ^8.1.4
         version: 8.1.4
+      pocketbase:
+        specifier: ^0.21.3
+        version: 0.21.3
     devDependencies:
       '@capacitor/cli':
         specifier: ^6.0.0
@@ -1111,6 +1114,9 @@ packages:
   plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}
     engines: {node: '>=10.4.0'}
+
+  pocketbase@0.21.3:
+    resolution: {integrity: sha512-bsQRZ1mj4dhPJ4P5iSrDqWQtBX2NtuBkf6IOZwTv27zZOw6zrISgo963i5JD/99qKKD5aMSMDPGk1BE9ZyI7Cg==}
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -2603,6 +2609,8 @@ snapshots:
       '@xmldom/xmldom': 0.8.10
       base64-js: 1.5.1
       xmlbuilder: 15.1.1
+
+  pocketbase@0.21.3: {}
 
   postcss-import@15.1.0(postcss@8.4.38):
     dependencies:

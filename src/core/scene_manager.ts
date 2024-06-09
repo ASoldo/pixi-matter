@@ -1,5 +1,5 @@
 import { BaseScene } from "./base_scene";
-import { LoadingScreen } from "../scenes/loading_screen";
+import { LoadingScene } from "./loading_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import { SceneNames } from "../system/types/scene_names";
@@ -8,9 +8,9 @@ export class SceneManager {
   private app: PIXI.Application;
   private engine: Engine;
   private render: Render;
-  private scenes: { [key: string]: BaseScene };
+  public scenes: { [key: string]: BaseScene };
   private currentScene: BaseScene | null;
-  private loadingScene: LoadingScreen;
+  private loadingScene: LoadingScene;
   public score = 0;
 
   constructor(app: PIXI.Application, engine: Engine, render: Render) {
@@ -19,7 +19,7 @@ export class SceneManager {
     this.render = render;
     this.scenes = {};
     this.currentScene = null;
-    this.loadingScene = new LoadingScreen(app, engine, render);
+    this.loadingScene = new LoadingScene(app, engine, render);
     this.score = 0;
   }
 

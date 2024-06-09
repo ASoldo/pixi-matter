@@ -14,8 +14,13 @@ export class GameScene2 extends BaseScene {
   protected p3: PIXI.Point = new PIXI.Point(600, 400);
   private tween!: TWEEN.Tween<Object> | null;
   private animatedCircle!: PIXI.Graphics;
-  constructor(app: PIXI.Application, engine: Engine, render: Render) {
-    super(app, engine, render);
+  constructor(
+    app: PIXI.Application,
+    engine: Engine,
+    render: Render,
+    nextScene: string,
+  ) {
+    super(app, engine, render, nextScene);
   }
 
   async preload(): Promise<void> {
@@ -100,7 +105,7 @@ export class GameScene2 extends BaseScene {
       .start();
 
     setTimeout(() => {
-      scene_manager.goToScene(SceneNames.SCENE3);
+      scene_manager.goToScene(this.nextScene as SceneNames);
     }, 3000);
     // this.loaded = true;
     this.setLoaded(true);
