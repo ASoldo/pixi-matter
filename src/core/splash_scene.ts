@@ -3,9 +3,9 @@ import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
-import { fetchGameRecords } from "../api/api";
+import { fetchGameRecords } from "../api/bundle_config_api";
 import { assetManager } from "../core/asset_manager";
-import { BundleRecord } from "../api/api";
+import { BundleRecord } from "../api/bundle_config_api";
 
 export class SplashScene extends BaseScene {
   constructor(

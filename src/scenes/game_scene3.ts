@@ -5,7 +5,7 @@ import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
 import { SceneNames } from "../system/types/scene_names";
 import { assetManager } from "../core/asset_manager";
-import { AssetRecord, BundleRecord } from "../api/api";
+import { AssetRecord, BundleRecord } from "../api/bundle_config_api";
 
 export class GameScene3 extends BaseScene {
   private platform!: Body;

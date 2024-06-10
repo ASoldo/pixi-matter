@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { AssetRecord, BundleRecord } from "../api/api";
+import { AssetRecord, BundleRecord } from "../api/bundle_config_api";
 
 export class AssetManager {
   private manifest: PIXI.AssetsManifest | null = null;
