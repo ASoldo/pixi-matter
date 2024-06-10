@@ -9,10 +9,8 @@ import * as TWEEN from "@tweenjs/tween.js";
 
 export class GameScene4 extends BaseScene {
   private quad!: PIXI.Mesh;
-  private noise_texture!: PIXI.Texture;
   private tween!: TWEEN.Tween<Object> | null;
   private bunny!: PIXI.Sprite;
-  private bunnyTexture!: PIXI.Texture;
 
   constructor(
     app: PIXI.Application,
@@ -25,18 +23,10 @@ export class GameScene4 extends BaseScene {
 
   async preload(): Promise<void> {
     console.log("Preloading Game Scene 4");
-
-    // Load the texture
-    this.noise_texture = (
-      await PIXI.Assets.load("https://pixijs.com/assets/perlin.jpg")
-    ).source;
-
-    this.bunnyTexture = await PIXI.Assets.load(
-      "https://pixijs.com/assets/bunny.png",
-    );
   }
 
   async init(): Promise<void> {
+    const GameScene4Textures = await PIXI.Assets.loadBundle(SceneNames.SCENE4);
     console.log("Initializing Game: ", this.name);
     this.loaded = false;
 
@@ -69,7 +59,7 @@ export class GameScene4 extends BaseScene {
           limit: { type: "f32", value: 0.0 },
           color: { type: "vec3<f32>", value: [0.0, 0.0, 0.0] },
         },
-        noise: this.noise_texture.source,
+        noise: GameScene4Textures.perlin.source,
       },
     });
 
@@ -91,7 +81,7 @@ export class GameScene4 extends BaseScene {
     this.app.stage.addChild(this.quad);
     this.quad.zIndex = 1;
 
-    this.bunny = new PIXI.Sprite(this.bunnyTexture);
+    this.bunny = new PIXI.Sprite(GameScene4Textures.bunny5);
     this.bunny.anchor.set(0.5);
     this.bunny.x = this.app.screen.width / 2;
     this.bunny.y = this.app.screen.height / 2;
@@ -129,9 +119,6 @@ export class GameScene4 extends BaseScene {
     this.app.stage.removeChild(this.quad);
     this.quad.destroy();
 
-    await PIXI.Assets.unload(this.noise_texture.source.label);
-
-    await PIXI.Assets.unload(this.bunnyTexture.source.label);
     this.bunny.destroy();
 
     this.tween?.stop();

@@ -43,14 +43,14 @@ export class GameScene1 extends BaseScene {
   }
 
   async preload(): Promise<void> {
-    await PIXI.Assets.load("/assets/images/bunny.png");
+    // await PIXI.Assets.load("/assets/images/bunny.png");
+    const GameScene1Assets = await PIXI.Assets.loadBundle(SceneNames.SCENE1);
 
     // Check if the sound already exists before adding it
-    if (!sound.exists("hit-sound")) {
-      sound.add(
-        "hit-sound",
-        "https://cdn.freesound.org/previews/573/573363_2393492-hq.mp3",
-      );
+    // "https://cdn.freesound.org/previews/573/573363_2393492-hq.mp3",
+
+    if (!sound.exists("hitsound")) {
+      sound.add("hitsound", GameScene1Assets.hitsound);
     }
   }
 
@@ -71,6 +71,7 @@ export class GameScene1 extends BaseScene {
   }
 
   async setup() {
+    const GameScene1Textures = await PIXI.Assets.loadBundle(SceneNames.SCENE1);
     this.platform = Bodies.rectangle(400, 100, 300, 30, {
       isStatic: true,
       friction: 1,
@@ -125,8 +126,8 @@ export class GameScene1 extends BaseScene {
     });
     World.add(this.engine.world, this.trigger);
 
-    const bunnyTexture = await PIXI.Assets.load("/assets/images/bunny.png");
-    this.bunny = new PIXI.Sprite(bunnyTexture);
+    // const bunnyTexture = await PIXI.Assets.load("/assets/images/bunny.png");
+    this.bunny = new PIXI.Sprite(GameScene1Textures.bunny3);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
     this.bunny.x = 300;
@@ -243,7 +244,7 @@ export class GameScene1 extends BaseScene {
 
     this.score += 1;
     this.scoreText.text = `Score: ${this.score}`;
-    sound.play("hit-sound");
+    sound.play("hitsound");
   }
 
   async update(_deltaTime: number): Promise<void> {

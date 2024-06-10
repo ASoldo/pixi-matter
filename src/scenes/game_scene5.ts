@@ -5,9 +5,6 @@ import { scene_manager } from "../core/core";
 import { SceneNames } from "../system/types/scene_names";
 
 export class GameScene5 extends BaseScene {
-  // public texture!: PIXI.Texture;
-  // public videoSprite!: PIXI.Sprite;
-
   constructor(
     app: PIXI.Application,
     engine: Engine,
@@ -25,63 +22,38 @@ export class GameScene5 extends BaseScene {
     console.log("Initializing Game: ", this.name);
     this.loaded = false;
 
-    // Load the video texture
-    // this.texture = await PIXI.Assets.load({
-    //   src: "https://videos.pexels.com/video-files/14597401/14597401-hd_1920_1080_24fps.mp4",
-    //   data: {
-    //     muted: true,
-    //   },
-    //   type: "video",
-    // });
-    //
-    // // Create a PIXI sprite using the video texture
-    // this.videoSprite = new PIXI.Sprite(this.texture);
-    // this.videoSprite.position.set(0, 0);
-    // this.videoSprite.width = this.app.screen.width;
-    // this.videoSprite.height = this.app.screen.height;
-    // this.app.stage.addChild(this.videoSprite);
-
-    // Example of how to pause the video
-    // (this.texture.source.resource as HTMLVideoElement).pause();
-
-    // Add font files to the bundle
-    PIXI.Assets.addBundle("fonts", [
-      {
-        alias: "ChaChicle",
-        src: "https://pixijs.com/assets/webfont-loader/ChaChicle.ttf",
-      },
-      {
-        alias: "Lineal",
-        src: "https://pixijs.com/assets/webfont-loader/Lineal.otf",
-      },
-      {
-        alias: "Dotrice Regular",
-        src: "https://pixijs.com/assets/webfont-loader/Dotrice-Regular.woff",
-      },
-      {
-        alias: "Crosterian",
-        src: "https://pixijs.com/assets/webfont-loader/Crosterian.woff2",
-      },
-    ]);
-
-    // Load the font bundle
-    await PIXI.Assets.loadBundle("fonts");
+    const GameScene5Fonts = await PIXI.Assets.loadBundle(SceneNames.SCENE5);
+    console.log("GameScene5Fonts: ", GameScene5Fonts);
 
     const text1 = new PIXI.Text({
       text: "ChaChicle.ttf",
-      style: { fontFamily: "ChaChicle", fontSize: 50 },
+      style: {
+        fontFamily: JSON.stringify(GameScene5Fonts.ChaChicle.family),
+        fontSize: 50,
+      },
     });
     const text2 = new PIXI.Text({
       text: "Lineal.otf",
-      style: { fontFamily: "Lineal", fontSize: 50 },
+      style: {
+        fontFamily: JSON.stringify(GameScene5Fonts.Lineal.family),
+        fontSize: 50,
+      },
     });
+
+    console.log("Lineal: ", JSON.stringify(GameScene5Fonts.Lineal.family));
     const text3 = new PIXI.Text({
       text: "Dotrice Regular.woff",
-      style: { fontFamily: "Dotrice Regular", fontSize: 50 },
+      style: {
+        fontFamily: JSON.stringify(GameScene5Fonts.DotriceRegular.family),
+        fontSize: 50,
+      },
     });
     const text4 = new PIXI.Text({
       text: "Crosterian.woff2",
-      style: { fontFamily: "Crosterian", fontSize: 50 },
+      style: {
+        fontFamily: JSON.stringify(GameScene5Fonts.Crosterian.family),
+        fontSize: 50,
+      },
     });
 
     text2.y = 150;
@@ -109,12 +81,7 @@ export class GameScene5 extends BaseScene {
   }
 
   async destroy(): Promise<void> {
-    // await PIXI.Assets.unload(this.texture.source.label);
     // this.videoSprite.destroy();
     console.log("Destroying Game: ", this.name);
-    await PIXI.Assets.unloadBundle("ChaChicle");
-    await PIXI.Assets.unloadBundle("Lineal");
-    await PIXI.Assets.unloadBundle("Dotrice Regular");
-    await PIXI.Assets.unloadBundle("Crosterian");
   }
 }
