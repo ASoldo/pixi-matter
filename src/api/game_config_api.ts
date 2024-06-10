@@ -28,7 +28,7 @@ async function fetchGameConfig(): Promise<GameConfig[]> {
       headers: {
         Authorization: `Bearer ${adminToken}`,
       },
-      expand: "scenes",
+      expand: "scenes.asset_bundle",
     });
 
     // Map the records to the GameConfig type
@@ -40,7 +40,7 @@ async function fetchGameConfig(): Promise<GameConfig[]> {
         id: scene.id,
         name: scene.name,
         description: scene.description,
-        asset_bundle: scene.asset_bundle,
+        asset_bundle: scene.expand.asset_bundle.name,
         scene: scene.scene,
       })),
       loop_schedule: record.loop_schedule,

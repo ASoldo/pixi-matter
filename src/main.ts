@@ -21,7 +21,7 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
     const gameConfigs = await fetchGameConfig();
     const gameConfig = gameConfigs[0]; // Assuming you want the first configuration
     console.log("Game Config: ", gameConfig);
-    const sceneNames = gameConfig.scenes.map((scene) => scene.scene);
+    const sceneNames = gameConfig.scenes.map((scene) => scene.asset_bundle);
     await app.init({
       width: 800,
       height: 600,
