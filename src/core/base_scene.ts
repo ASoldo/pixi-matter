@@ -9,12 +9,14 @@ export abstract class BaseScene {
   protected loaded: boolean; // Flag to track if the scene is fully loaded
   public name: string;
   protected nextScene?: string;
+  protected sceneNames?: string[];
 
   constructor(
     app: PIXI.Application,
     engine: Engine,
     render: Render,
     nextScene?: string,
+    sceneNames?: string[],
   ) {
     this.app = app;
     this.engine = engine;
@@ -23,6 +25,7 @@ export abstract class BaseScene {
     this.loaded = false;
     this.name = "";
     this.nextScene = nextScene;
+    this.sceneNames = sceneNames;
   }
 
   abstract init(): Promise<void>;

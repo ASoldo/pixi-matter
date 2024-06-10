@@ -2,9 +2,9 @@ import { BaseScene } from "./base_scene";
 import * as PIXI from "pixi.js";
 import { Engine, Render } from "matter-js";
 import { scene_manager } from "../core/core";
+import { assetManager } from "../core/asset_manager";
 import { SceneNames } from "../system/types/scene_names";
 import { fetchGameRecords } from "../api/bundle_config_api";
-import { assetManager } from "../core/asset_manager";
 import { BundleRecord } from "../api/bundle_config_api";
 
 export class SplashScene extends BaseScene {
@@ -13,14 +13,15 @@ export class SplashScene extends BaseScene {
     engine: Engine,
     render: Render,
     nextScene: string,
+    sceneNames: string[],
   ) {
-    super(app, engine, render, nextScene);
+    super(app, engine, render, nextScene, sceneNames);
   }
 
   async preload(): Promise<void> {
     console.log("Preloading Splash Scene");
     try {
-      const records = await fetchGameRecords();
+      const records = await fetchGameRecords(this.sceneNames as string[]);
       console.log("Fetched records: ", records);
 
       if (!records) {
@@ -38,7 +39,7 @@ export class SplashScene extends BaseScene {
     console.log("Initializing Splash Scene: ", this.name);
     this.loaded = false;
     console.log("NextScene: ", this.nextScene);
-    scene_manager.goToScene(this.nextScene as SceneNames); // or GameScene3, as appropriate
+    scene_manager.goToScene(this.nextScene as SceneNames);
     this.setLoaded(true);
   }
 

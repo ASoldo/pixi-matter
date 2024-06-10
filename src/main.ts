@@ -21,7 +21,7 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
     const gameConfigs = await fetchGameConfig();
     const gameConfig = gameConfigs[0]; // Assuming you want the first configuration
     console.log("Game Config: ", gameConfig);
-
+    const sceneNames = gameConfig.scenes.map((scene) => scene.scene);
     await app.init({
       width: 800,
       height: 600,
@@ -114,32 +114,17 @@ import { app, scene_manager, matterRender, engine, runner } from "./core/core";
       }
     }
 
-    // scene_manager.addScene(
-    //   SceneNames.SCENE1,
-    //   new GameScene1(app, engine, matterRender, gameConfig.scenes[1].scene),
-    // );
-    // scene_manager.addScene(
-    //   SceneNames.SCENE2,
-    //   new GameScene2(app, engine, matterRender),
-    // );
-    // scene_manager.addScene(
-    //   SceneNames.SCENE3,
-    //   new GameScene3(app, engine, matterRender, gameConfig.scenes[0].scene),
-    // );
-    // scene_manager.addScene(
-    //   SceneNames.SCENE4,
-    //   new GameScene4(app, engine, matterRender),
-    // );
-    //
-    // scene_manager.addScene(
-    //   SceneNames.SCENE5,
-    //   new GameScene5(app, engine, matterRender),
-    // );
-    //
     scene_manager.addScene(
       SceneNames.SPLASH_SCENE,
-      new SplashScene(app, engine, matterRender, gameConfig.scenes[0].scene),
+      new SplashScene(
+        app,
+        engine,
+        matterRender,
+        gameConfig.scenes[0].scene,
+        sceneNames,
+      ),
     );
+    console.log("Scene Names: ", sceneNames);
 
     setupBridge(app, scene_manager);
 

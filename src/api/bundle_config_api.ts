@@ -39,7 +39,7 @@ export type BundleRecord = {
 const pb = new PocketBase(import.meta.env.VITE_BASE_URL);
 const adminToken = import.meta.env.VITE_POCKETBASE_ADMIN_TOKEN;
 
-async function fetchGameRecords(): Promise<BundleRecord[]> {
+async function fetchGameRecords(sceneNames: string[]): Promise<BundleRecord[]> {
   try {
     const records = await pb.collection("bundles").getFullList({
       headers: {
@@ -48,8 +48,13 @@ async function fetchGameRecords(): Promise<BundleRecord[]> {
       expand: "assets",
     });
 
+    // Filter the bundles based on the provided scene names
+    const filteredRecords = records.filter((record: any) =>
+      sceneNames.includes(record.name),
+    );
+
     // Map the records to the Bundle type
-    const bundles: BundleRecord[] = records.map((record: any) => ({
+    const bundles: BundleRecord[] = filteredRecords.map((record: any) => ({
       name: record.name,
       assets: record.expand.assets.map((asset: any) => ({
         alias: asset.alias,
