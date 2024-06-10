@@ -23,7 +23,7 @@ export class GameScene3 extends BaseScene {
   // Preload method to load textures
   async preload(): Promise<void> {
     try {
-      await PIXI.Assets.backgroundLoadBundle(["GameScene3"]);
+      await PIXI.Assets.backgroundLoadBundle([SceneNames.SCENE3]);
     } catch (error) {
       console.error("Error preloading assets:", error);
     }
