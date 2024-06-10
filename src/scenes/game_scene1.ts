@@ -43,7 +43,6 @@ export class GameScene1 extends BaseScene {
   }
 
   async preload(): Promise<void> {
-    // await PIXI.Assets.load("/assets/images/bunny.png");
     const GameScene1Assets = await PIXI.Assets.loadBundle(SceneNames.SCENE1);
 
     // Check if the sound already exists before adding it
