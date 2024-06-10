@@ -4,17 +4,12 @@ import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
 import { SceneNames } from "../system/types/scene_names";
-import { assetManager } from "../core/asset_manager";
-import { AssetRecord, BundleRecord } from "../api/bundle_config_api";
 
 export class GameScene3 extends BaseScene {
   private platform!: Body;
   private bunny!: PIXI.Sprite;
   private tweenBunny!: PIXI.Sprite;
   private tween!: TWEEN.Tween<PIXI.Sprite> | null;
-
-  // Private field to store textures
-  private textures: Record<string, PIXI.Texture> = {};
 
   constructor(
     app: PIXI.Application,
@@ -28,30 +23,7 @@ export class GameScene3 extends BaseScene {
   // Preload method to load textures
   async preload(): Promise<void> {
     try {
-      const manifest = assetManager.getManifest();
-      if (!manifest) {
-        throw new Error("Manifest not loaded");
-      }
-
-      // Create an array of promises to load each texture
-      const loadPromises: Array<Promise<PIXI.Texture>> = [];
-      for (const bundle of manifest.bundles as BundleRecord[]) {
-        for (const asset of bundle.assets as AssetRecord[]) {
-          loadPromises.push(PIXI.Assets.load(asset.alias));
-        }
-      }
-
-      // Await all load promises
-      await Promise.all(loadPromises);
-
-      // Store loaded textures in the private field
-      for (const bundle of manifest.bundles as BundleRecord[]) {
-        for (const asset of bundle.assets as AssetRecord[]) {
-          this.textures[asset.alias] = PIXI.Assets.get(
-            asset.alias,
-          ) as PIXI.Texture;
-        }
-      }
+      await PIXI.Assets.backgroundLoadBundle(["GameScene3"]);
     } catch (error) {
       console.error("Error preloading assets:", error);
     }
@@ -76,14 +48,15 @@ export class GameScene3 extends BaseScene {
     World.add(this.engine.world, this.platform);
 
     // Initialize sprites with loaded textures
-    this.bunny = new PIXI.Sprite(this.textures["bunny"]);
+    const GameScene3Textures = await PIXI.Assets.loadBundle("GameScene3");
+    this.bunny = new PIXI.Sprite(GameScene3Textures.bunny);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
     this.bunny.x = 300;
     this.bunny.y = 100;
     this.app.stage.addChild(this.bunny);
 
-    this.tweenBunny = new PIXI.Sprite(this.textures["bunny2"]);
+    this.tweenBunny = new PIXI.Sprite(GameScene3Textures.bunny2);
     this.tweenBunny.anchor.set(0.5);
     this.tweenBunny.pivot.set(0.5);
     this.tweenBunny.position.set(0, 300);
@@ -121,13 +94,6 @@ export class GameScene3 extends BaseScene {
     console.log("Destroying Game: ", this.name);
 
     World.remove(this.engine.world, this.platform);
-
-    const bundleNames = assetManager.getBundleNames();
-    await Promise.all(
-      bundleNames.map((bundleName: string) =>
-        assetManager.unloadBundle(bundleName),
-      ),
-    );
 
     this.app.stage.removeChild(this.bunny);
     this.bunny.destroy();
