@@ -4,6 +4,7 @@ import * as PIXI from "pixi.js";
 import { Engine, Render, Body, Bodies, World } from "matter-js";
 import * as TWEEN from "@tweenjs/tween.js";
 import { SceneNames } from "../system/types/scene_names";
+import { assetManager } from "../core/asset_manager";
 
 export class GameScene3 extends BaseScene {
   private platform!: Body;
@@ -23,7 +24,6 @@ export class GameScene3 extends BaseScene {
   // Preload method to load textures
   async preload(): Promise<void> {
     try {
-      await PIXI.Assets.backgroundLoadBundle([SceneNames.SCENE3]);
     } catch (error) {
       console.error("Error preloading assets:", error);
     }
@@ -33,6 +33,8 @@ export class GameScene3 extends BaseScene {
   async init(): Promise<void> {
     console.log("Initializing Game: ", this.name);
     this.loaded = false;
+
+    const GameScene3Textures = await PIXI.Assets.loadBundle(SceneNames.SCENE3);
 
     // Create a platform using Matter.js
     this.platform = Bodies.rectangle(600, 400, 300, 300, {
@@ -48,7 +50,6 @@ export class GameScene3 extends BaseScene {
     World.add(this.engine.world, this.platform);
 
     // Initialize sprites with loaded textures
-    const GameScene3Textures = await PIXI.Assets.loadBundle("GameScene3");
     this.bunny = new PIXI.Sprite(GameScene3Textures.bunny);
     this.bunny.anchor.set(0.5);
     this.bunny.pivot.set(0.5);
@@ -103,5 +104,7 @@ export class GameScene3 extends BaseScene {
 
     this.tween?.stop();
     this.tween = null;
+
+    await assetManager.unloadBundle(SceneNames.SCENE3);
   }
 }
